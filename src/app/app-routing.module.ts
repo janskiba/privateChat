@@ -2,13 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import {AuthComponent} from './auth/auth.component';
+import { AuthComponent } from './auth/auth.component';
+import { SigninEmailPasswordComponent } from './auth/signin-email-password/signin-email-password.component';
+import { ChooseSiginMethodComponent } from './auth/choose-sigin-method/choose-sigin-method.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AuthComponent,
-  }
+    children: [
+      { path: '', component: ChooseSiginMethodComponent },
+      { path: 'signin', component: SigninEmailPasswordComponent },
+    ],
+  },
 ];
 
 @NgModule({
@@ -16,4 +22,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
