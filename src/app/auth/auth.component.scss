@@ -1,0 +1,39 @@
+@import "../../variables";
+
+.auth-container {
+  height: 100%;
+  padding: 0 20px;
+  background-color: $base-background;
+  text-align: center;
+  color: $text-dark;
+
+  .logo-container {
+    padding: 150px 0;
+    img {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+
+  .signin-methods {
+    button {
+      width: 100%;
+      max-width: 415px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      font-size: $base-font-size;
+      background-color: $grey-light;
+      border-radius: $border-radius;
+      color: $text-dark;
+      border: none;
+      img {
+        width: 40px;
+        height: auto;
+        margin-right: 3%;
+      }
+    }
+  }
+}
