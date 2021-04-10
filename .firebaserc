@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "privatechat-a628d": {
+      "hosting": {
+        "privateChat": [
+          "privatechat-a628d"
+        ]
+      }
+    }
+  }
+}

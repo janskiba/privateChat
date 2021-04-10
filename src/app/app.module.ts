@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -10,11 +13,18 @@ import { CreateAccountComponent } from './auth/create-account/create-account.com
 /* import { AuthRoutingModule } from './auth/auth-routing.module';
  */
 @NgModule({
-  declarations: [AppComponent, AuthComponent, SigninEmailPasswordComponent, ChooseSiginMethodComponent, CreateAccountComponent],
+  declarations: [
+    AppComponent,
+    AuthComponent,
+    SigninEmailPasswordComponent,
+    ChooseSiginMethodComponent,
+    CreateAccountComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    /* AuthRoutingModule */
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
