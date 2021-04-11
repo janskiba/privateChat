@@ -1,9 +1,12 @@
 <div class="signin-methods">
-  <button>
+  <button (click)="authService.signInWithGoogle()">
     <img src="../../assets/google-1088004.svg" alt="google icon" />
     Zaloguj się przez konto Google
   </button>
   <button routerLink="signin">
     Zaloguj się przy użyciu adresu e-mail i hasła
   </button>
+  <p *ngIf="authService.user$ | async as user" style="color: white">
+    {{ user.email }}
+  </p>
 </div>

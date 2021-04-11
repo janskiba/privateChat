@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-choose-sigin-method',
   templateUrl: './choose-sigin-method.component.html',
-  styleUrls: ['./choose-sigin-method.component.scss']
+  styleUrls: ['./choose-sigin-method.component.scss'],
 })
 export class ChooseSiginMethodComponent implements OnInit {
+  constructor(public authService: AuthService) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
