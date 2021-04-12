@@ -6,7 +6,4 @@
   <button routerLink="signin">
     Zaloguj się przy użyciu adresu e-mail i hasła
   </button>
-  <p *ngIf="authService.user$ | async as user" style="color: white">
-    {{ user.email }}
-  </p>
 </div>

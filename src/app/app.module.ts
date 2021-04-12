@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
@@ -25,6 +27,7 @@ import { CreateAccountComponent } from './auth/create-account/create-account.com
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

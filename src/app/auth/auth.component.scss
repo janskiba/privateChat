@@ -13,5 +13,13 @@
       width: 100%;
       max-width: 400px;
     }
+
+    img:hover {
+      cursor: pointer;
+    }
+
+    img:focus {
+      outline: none;
+    }
   }
 }
