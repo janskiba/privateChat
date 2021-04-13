@@ -13,8 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SigninEmailPasswordComponent } from './auth/signin-email-password/signin-email-password.component';
 import { ChooseSiginMethodComponent } from './auth/choose-sigin-method/choose-sigin-method.component';
 import { CreateAccountComponent } from './auth/create-account/create-account.component';
-/* import { AuthRoutingModule } from './auth/auth-routing.module';
- */
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +25,7 @@ import { CreateAccountComponent } from './auth/create-account/create-account.com
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
     FormsModule,
