@@ -1,0 +1,39 @@
+@import "../../../variables";
+.header-container {
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+  background-color: $gray-primary;
+  .header-column {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    border: 1px solid $primary-border-color;
+  }
+  .header-left {
+    max-width: 520px;
+    border-right: none;
+
+    .user-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      mat-icon {
+        margin-right: 15px;
+      }
+      p {
+        margin-top: 20px;
+      }
+    }
+
+    #logout:hover {
+      cursor: pointer;
+    }
+  }
+  .header-right {
+    max-width: 880px;
+  }
+}

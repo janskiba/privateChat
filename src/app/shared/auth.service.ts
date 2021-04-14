@@ -47,6 +47,11 @@ export class AuthService {
     return this.updateUserData(credential.user);
   }
 
+  async googleSignOut() {
+    await this.angularFireAuth.signOut();
+    this.router.navigate(['/']);
+  }
+
   createAccountEmailPassword(email: string, password: string) {
     return this.angularFireAuth
       .createUserWithEmailAndPassword(email, password)
@@ -66,7 +71,6 @@ export class AuthService {
       .then((result) => {
         this.updateUserData(result.user);
         console.log('succesfully logged in' + result.user);
-        this.router.navigate(['/']);
       });
   }
 
@@ -81,6 +85,8 @@ export class AuthService {
       displayName: user.displayName,
       photoURL: user.photoURL,
     };
+
+    this.router.navigate(['/user-homepage']);
 
     return userRef.set(data, { merge: true });
   }

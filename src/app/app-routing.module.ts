@@ -6,6 +6,7 @@ import { AuthComponent } from './auth/auth.component';
 import { SigninEmailPasswordComponent } from './auth/signin-email-password/signin-email-password.component';
 import { ChooseSiginMethodComponent } from './auth/choose-sigin-method/choose-sigin-method.component';
 import { CreateAccountComponent } from './auth/create-account/create-account.component';
+import { ChatHomepageComponent } from './chat-homepage/chat-homepage.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       { path: 'signin', component: SigninEmailPasswordComponent },
       { path: 'signin/create-account', component: CreateAccountComponent },
     ],
+  },
+  {
+    path: 'user-homepage',
+    component: ChatHomepageComponent,
   },
 ];
 

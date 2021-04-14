@@ -1,0 +1,16 @@
+<div class="header-container">
+  <div
+    *ngIf="authService.user$ | async as user"
+    class="header-column header-left"
+  >
+    <div class="user-info">
+      <mat-icon class="material-icons-outlined md-40">face</mat-icon>
+      <p>{{ user.displayName }}</p>
+    </div>
+
+    <span id="logout" (click)="authService.googleSignOut()">
+      <mat-icon class="material-icons-outlined md-40">logout</mat-icon>
+    </span>
+  </div>
+  <div class="header-column header-right"></div>
+</div>

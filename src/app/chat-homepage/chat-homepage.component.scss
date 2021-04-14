@@ -1,0 +1,13 @@
+@import "../../variables";
+
+#wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: $user-homepage-background;
+  color: $text-light;
+  .app-container {
+    max-width: $max-width;
+    max-height: $max-width;
+    margin: auto;
+  }
+}
