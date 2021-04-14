@@ -1,0 +1,35 @@
+@import "../../../variables";
+.contact-list-container {
+  height: 100%;
+  min-height: 400px;
+  max-height: 920px;
+  width: 100%;
+  max-width: 520px;
+  background-color: $gray-primary;
+  border: 1px solid $primary-border-color;
+  border-top: none;
+
+  .search-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    input {
+      width: 100%;
+      max-width: 335px;
+      height: 40px;
+      padding-left: 10px;
+      margin-right: 10px;
+      font-size: 17px;
+      background-color: $grey-light;
+      border-radius: 15px;
+      color: $text-dark;
+      border: none;
+    }
+
+    #search-contact:hover {
+      cursor: pointer;
+    }
+  }
+}
