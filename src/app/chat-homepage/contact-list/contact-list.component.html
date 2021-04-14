@@ -1,8 +1,19 @@
 <div class="contact-list-container">
   <div class="search-form">
-    <input type="text" placeholder="Znajdź znajomych po ich adresie email" />
-    <span id="search-contact">
-      <mat-icon class="material-icons-outlined md-30"> person_add </mat-icon>
-    </span>
+    <form action=""></form>
+
+    <form #findForm="ngForm" (ngSubmit)="findContact(findForm)">
+      <input
+        type="text"
+        placeholder="Znajdź znajomych po ich adresie email"
+        ngModel
+        name="email"
+        required
+        email
+      />
+      <button type="submit" mat-icon-button>
+        <mat-icon class="material-icons-outlined md-30">person_add</mat-icon>
+      </button>
+    </form>
   </div>
 </div>

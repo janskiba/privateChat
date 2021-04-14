@@ -9,7 +9,7 @@
   border: 1px solid $primary-border-color;
   border-top: none;
 
-  .search-form {
+  form {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -26,10 +26,6 @@
       border-radius: 15px;
       color: $text-dark;
       border: none;
-    }
-
-    #search-contact:hover {
-      cursor: pointer;
     }
   }
 }

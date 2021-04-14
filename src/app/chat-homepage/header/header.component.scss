@@ -8,7 +8,6 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    justify-content: space-around;
     width: 100%;
     height: 100%;
     border: 1px solid $primary-border-color;
@@ -27,10 +26,6 @@
       p {
         margin-top: 20px;
       }
-    }
-
-    #logout:hover {
-      cursor: pointer;
     }
   }
   .header-right {

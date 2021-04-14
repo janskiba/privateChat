@@ -8,9 +8,9 @@
       <p>{{ user.displayName }}</p>
     </div>
 
-    <span id="logout" (click)="authService.googleSignOut()">
-      <mat-icon class="material-icons-outlined md-40">logout</mat-icon>
-    </span>
+    <button type="submit" mat-icon-button (click)="authService.googleSignOut()">
+      <mat-icon class="material-icons md-30">logout</mat-icon>
+    </button>
   </div>
   <div class="header-column header-right"></div>
 </div>

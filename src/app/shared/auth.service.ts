@@ -28,13 +28,18 @@ export class AuthService {
       switchMap((user) => {
         if (user) {
           return this.angularFirestore
-            .doc<any>(`users/${user.uid}`)
+            .doc<any>(`users/${user.email}`)
             .valueChanges();
         } else {
           return of(null);
         }
       })
     );
+  }
+
+  getUser() {
+    //converts user observable to a promise so we can later use it with async await
+    return this.user$.pipe(first()).toPromise();
   }
 
   signInWithGoogle() {
@@ -76,7 +81,7 @@ export class AuthService {
 
   private updateUserData(user) {
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
-      `users/${user.uid}`
+      `users/${user.email}`
     );
 
     const data = {

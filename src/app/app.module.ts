@@ -9,6 +9,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 //material design icons
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -24,6 +25,7 @@ import { ContactComponent } from './chat-homepage/contact-list/contact/contact.c
 import { SendMessageComponent } from './chat-homepage/chat/send-message/send-message.component';
 import { MessageListComponent } from './chat-homepage/chat/message-list/message-list.component';
 import { MessageComponent } from './chat-homepage/chat/message-list/message/message.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { MessageComponent } from './chat-homepage/chat/message-list/message/mess
     FormsModule,
     HttpClientModule,
     MatIconModule,
+    NoopAnimationsModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
