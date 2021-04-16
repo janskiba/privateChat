@@ -35,7 +35,7 @@ $privateChat-theme: mat-light-theme(
 @include angular-material-theme($privateChat-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
+@import "./variables";
 html,
 body {
   height: 100%;
@@ -69,5 +69,6 @@ body {
     height: 40px;
     width: 40px;
     font-size: 40px;
+    color: $text-light;
   }
 }

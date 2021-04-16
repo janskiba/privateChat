@@ -40,7 +40,7 @@ export class ManageContactsService {
       .subscribe((doc) => {
         if (doc.exists) {
           console.log('User data:', doc.data());
-          return this.updateContactList(contact);
+          return this.updateContactList(doc.data());
         } else {
           // doc.data() will be undefined in this case
           console.log('No such user!');
@@ -50,7 +50,8 @@ export class ManageContactsService {
 
   updateContactList(contact) {
     const data = {
-      email: contact,
+      displayName: contact.displayName,
+      email: contact.email,
     };
 
     return this.contactsRef.add(data);

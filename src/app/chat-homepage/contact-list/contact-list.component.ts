@@ -11,11 +11,11 @@ import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 })
 export class ContactListComponent implements OnInit {
   contacts$: Observable<any>;
-  contacts = [];
 
   constructor(private manageContactsService: ManageContactsService) {}
 
   ngOnInit(): void {
+    //subscribe to contacts$ in the template
     this.contacts$ = this.manageContactsService.getContacts();
   }
 
