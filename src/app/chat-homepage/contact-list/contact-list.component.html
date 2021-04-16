@@ -16,4 +16,9 @@
       </button>
     </form>
   </div>
+  <ul class="contact-list">
+    <li *ngFor="let contact of contacts$ | async">
+      <a href="">{{ contact.email }}</a>
+    </li>
+  </ul>
 </div>

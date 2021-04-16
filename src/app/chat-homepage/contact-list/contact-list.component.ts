@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 
 @Component({
@@ -8,13 +10,18 @@ import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
   styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent implements OnInit {
-  constructor(private findContactService: ManageContactsService) {}
+  contacts$: Observable<any>;
+  contacts = [];
 
-  ngOnInit(): void {}
+  constructor(private manageContactsService: ManageContactsService) {}
+
+  ngOnInit(): void {
+    this.contacts$ = this.manageContactsService.getContacts();
+  }
 
   findContact(form: NgForm) {
     const contact: string = form.value.email;
-    this.findContactService.findContact(contact);
+    this.manageContactsService.findContact(contact);
     form.resetForm();
   }
 }
