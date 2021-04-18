@@ -14,7 +14,7 @@ import { Observable, of } from 'rxjs';
 })
 export class ManageContactsService {
   contactsRef: AngularFirestoreCollection<any> = null;
-  clickedContact$: Observable<any> = null;
+  clickedContact$: Observable<any>;
 
   constructor(
     private angularFirestore: AngularFirestore,

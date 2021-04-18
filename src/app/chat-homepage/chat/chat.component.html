@@ -1,1 +1,8 @@
-<div class="chat-container"><p>chat works!</p></div>
+<div class="chat-container">
+  <div class="find-contactsInfo" *ngIf="!manageContactsService.clickedContact$">
+    <p>
+      Wyszukaj swoich znajomych po ich adresie email lub wybierz z lusty obok
+      aby zacząć konwersację
+    </p>
+  </div>
+</div>

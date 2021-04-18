@@ -15,9 +15,18 @@
       max-width: 1400px;
       max-height: 1400px;
 
-      app-contact-list,
-      app-chat {
+      app-contact-list {
+        max-width: 520px;
+        height: 800px;
         width: 100%;
+        background-color: $gray-primary;
+        border-right: 1px solid $primary-border-color;
+      }
+      app-chat {
+        max-width: 880px;
+        height: 800px;
+        width: 100%;
+        background-color: $gray-dark;
       }
     }
   }

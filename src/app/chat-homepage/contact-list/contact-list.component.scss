@@ -1,13 +1,7 @@
 @import "../../../variables";
 .contact-list-container {
   height: 100%;
-  min-height: 400px;
-  max-height: 920px;
   width: 100%;
-  max-width: 520px;
-  background-color: $gray-primary;
-  border: 1px solid $primary-border-color;
-  border-top: none;
 
   form:nth-child(2) {
     display: flex;

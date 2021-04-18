@@ -4,16 +4,16 @@
   flex-direction: row;
   height: 80px;
   background-color: $gray-primary;
+  border-bottom: 1px solid $primary-border-color;
   .header-column {
     display: flex;
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    border: 1px solid $primary-border-color;
   }
   .header-left {
     max-width: 520px;
-    border-right: none;
+    border-right: 1px solid $primary-border-color;
 
     .user-info {
       display: flex;
