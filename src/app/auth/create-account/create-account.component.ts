@@ -15,7 +15,8 @@ export class CreateAccountComponent implements OnInit {
   onSubmit(form: NgForm) {
     this.authService.createAccountEmailPassword(
       form.value.email,
-      form.value.password
+      form.value.password,
+      form.value.userName
     );
   }
 }

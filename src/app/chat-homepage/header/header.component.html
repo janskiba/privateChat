@@ -12,5 +12,13 @@
       <mat-icon class="material-icons md-30">logout</mat-icon>
     </button>
   </div>
-  <div class="header-column header-right"></div>
+  <div class="header-column header-right">
+    <div
+      class="contact-info"
+      *ngIf="manageContactsService.clickedContact$ | async as contactName"
+    >
+      <mat-icon class="material-icons-outlined md-40">face</mat-icon>
+      <p>{{ contactName }}</p>
+    </div>
+  </div>
 </div>

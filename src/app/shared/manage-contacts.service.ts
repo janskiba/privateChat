@@ -7,12 +7,14 @@ import {
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import { map, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ManageContactsService {
   contactsRef: AngularFirestoreCollection<any> = null;
+  clickedContact$: Observable<any> = null;
 
   constructor(
     private angularFirestore: AngularFirestore,
@@ -76,5 +78,11 @@ export class ManageContactsService {
           );
       })
     );
+  }
+
+  displayClickedContact(userName: string) {
+    //convert string into observable
+    const obs = of(userName);
+    this.clickedContact$ = obs;
   }
 }

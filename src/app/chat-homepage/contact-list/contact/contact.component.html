@@ -1,5 +1,8 @@
-<div class="contact-container">
+<div
+  class="contact-container"
+  (click)="onContactClick(childContact.displayName)"
+>
   <mat-icon class="material-icons-outlined md-40">face</mat-icon>
   <p>{{ childContact.displayName }}</p>
-  <p>{{ childContact.email }}</p>
+  <p>&nbsp; ({{ childContact.email }})</p>
 </div>

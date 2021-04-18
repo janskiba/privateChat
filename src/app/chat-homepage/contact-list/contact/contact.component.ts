@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 
 @Component({
   selector: 'app-contact',
@@ -8,7 +9,12 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ContactComponent implements OnInit {
   @Input() childContact;
 
-  constructor() {}
+  constructor(private manageContactsService: ManageContactsService) {}
 
   ngOnInit(): void {}
+
+  onContactClick(userName: string) {
+    this.manageContactsService.displayClickedContact(userName);
+    console.log(userName);
+  }
 }

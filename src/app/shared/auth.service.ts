@@ -57,12 +57,17 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  createAccountEmailPassword(email: string, password: string) {
+  async createAccountEmailPassword(
+    email: string,
+    password: string,
+    userName: string
+  ) {
     return this.angularFireAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
-        this.updateUserData(result.user);
-        console.log('succesfully signed in' + result.user);
+        console.log(result.user);
+        //call updateProfile to add userName in data object
+        this.updateProfile(result.user, userName);
         this.router.navigate(['/signin']);
       })
       .catch((error) => {
@@ -73,10 +78,19 @@ export class AuthService {
   signInEmailPassword(email: string, password: string) {
     return this.angularFireAuth
       .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.updateUserData(result.user);
-        console.log('succesfully logged in' + result.user);
+      .then(() => {
+        this.router.navigate(['/user-homepage']);
       });
+  }
+
+  updateProfile(user, displayName: string) {
+    const data = {
+      uid: user.uid,
+      email: user.email,
+      displayName: displayName,
+      photoURL: user.photoURL,
+    };
+    this.updateUserData(data);
   }
 
   private updateUserData(user) {

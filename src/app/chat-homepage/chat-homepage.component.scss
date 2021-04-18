@@ -9,5 +9,16 @@
     max-width: $max-width;
     max-height: $max-width;
     margin: auto;
+    .components-container {
+      display: flex;
+      width: 100%;
+      max-width: 1400px;
+      max-height: 1400px;
+
+      app-contact-list,
+      app-chat {
+        width: 100%;
+      }
+    }
   }
 }
