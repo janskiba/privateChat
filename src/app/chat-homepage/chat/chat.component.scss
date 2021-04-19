@@ -1,0 +1,27 @@
+@import "../../../variables";
+.chat-container {
+  position: relative;
+  height: 100%;
+  .find-contactsInfo {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      line-height: 28px;
+      max-width: 500px;
+      text-align: center;
+      font-size: 24px;
+    }
+  }
+  app-send-message {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    background: $gray-medium;
+  }
+}

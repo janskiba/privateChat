@@ -1,0 +1,13 @@
+@import "../../../../styles.scss";
+.contact-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 11%;
+  p {
+    color: $text-light;
+  }
+  mat-icon {
+    margin-right: 15px;
+  }
+}

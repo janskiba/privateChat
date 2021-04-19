@@ -4,6 +4,13 @@
     <form #createAccountForm="ngForm" (ngSubmit)="onSubmit(createAccountForm)">
       <input
         type="text"
+        placeholder="nazwa użytkownika"
+        ngModel
+        name="userName"
+        required
+      />
+      <input
+        type="text"
         placeholder="email"
         ngModel
         name="email"

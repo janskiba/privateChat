@@ -1,0 +1,12 @@
+<form #sendMessage="ngForm" (ngSubmit)="onSubmit(sendMessage)">
+  <input
+    type="text"
+    name="message"
+    required
+    placeholder="Wpisz wiadomość"
+    ngModel
+  />
+  <button type="submit" mat-icon-button [disabled]="!sendMessage.valid">
+    <mat-icon class="material-icons-outlined md-30">send</mat-icon>
+  </button>
+</form>

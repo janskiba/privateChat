@@ -1,0 +1,24 @@
+<div class="header-container">
+  <div
+    *ngIf="authService.user$ | async as user"
+    class="header-column header-left"
+  >
+    <div class="user-info">
+      <mat-icon class="material-icons-outlined md-40">face</mat-icon>
+      <p>{{ user.displayName }}</p>
+    </div>
+
+    <button type="submit" mat-icon-button (click)="authService.googleSignOut()">
+      <mat-icon class="material-icons md-30">logout</mat-icon>
+    </button>
+  </div>
+  <div class="header-column header-right">
+    <div
+      class="contact-info"
+      *ngIf="manageContactsService.clickedContact$ | async as contactName"
+    >
+      <mat-icon class="material-icons-outlined md-40">face</mat-icon>
+      <p>{{ contactName }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="contact-list-container">
+  <div class="search-form">
+    <form action=""></form>
+
+    <form #findForm="ngForm" (ngSubmit)="findContact(findForm)">
+      <input
+        type="text"
+        placeholder="Znajdź znajomych po ich adresie email"
+        ngModel
+        name="email"
+        required
+        email
+      />
+      <button type="submit" mat-icon-button [disabled]="!findForm.valid">
+        <mat-icon class="material-icons-outlined md-30">person_add</mat-icon>
+      </button>
+    </form>
+  </div>
+  <mat-selection-list #contacts [multiple]="false">
+    <mat-list-option
+      *ngFor="let contact of contacts$ | async"
+      [value]="contact"
+    >
+      <app-contact [childContact]="contact"></app-contact>
+    </mat-list-option>
+  </mat-selection-list>
+</div>

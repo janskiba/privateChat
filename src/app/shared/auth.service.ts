@@ -28,13 +28,18 @@ export class AuthService {
       switchMap((user) => {
         if (user) {
           return this.angularFirestore
-            .doc<any>(`users/${user.uid}`)
+            .doc<any>(`users/${user.email}`)
             .valueChanges();
         } else {
           return of(null);
         }
       })
     );
+  }
+
+  getUser() {
+    //converts user observable to a promise so we can later use it with async await
+    return this.user$.pipe(first()).toPromise();
   }
 
   signInWithGoogle() {
@@ -47,12 +52,22 @@ export class AuthService {
     return this.updateUserData(credential.user);
   }
 
-  createAccountEmailPassword(email: string, password: string) {
+  async googleSignOut() {
+    await this.angularFireAuth.signOut();
+    this.router.navigate(['/']);
+  }
+
+  async createAccountEmailPassword(
+    email: string,
+    password: string,
+    userName: string
+  ) {
     return this.angularFireAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
-        this.updateUserData(result.user);
-        console.log('succesfully signed in' + result.user);
+        console.log(result.user);
+        //call updateProfile to add userName in data object
+        this.updateProfile(result.user, userName);
         this.router.navigate(['/signin']);
       })
       .catch((error) => {
@@ -63,16 +78,24 @@ export class AuthService {
   signInEmailPassword(email: string, password: string) {
     return this.angularFireAuth
       .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.updateUserData(result.user);
-        console.log('succesfully logged in' + result.user);
-        this.router.navigate(['/']);
+      .then(() => {
+        this.router.navigate(['/user-homepage']);
       });
+  }
+
+  updateProfile(user, displayName: string) {
+    const data = {
+      uid: user.uid,
+      email: user.email,
+      displayName: displayName,
+      photoURL: user.photoURL,
+    };
+    this.updateUserData(data);
   }
 
   private updateUserData(user) {
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
-      `users/${user.uid}`
+      `users/${user.email}`
     );
 
     const data = {
@@ -81,6 +104,8 @@ export class AuthService {
       displayName: user.displayName,
       photoURL: user.photoURL,
     };
+
+    this.router.navigate(['/user-homepage']);
 
     return userRef.set(data, { merge: true });
   }
