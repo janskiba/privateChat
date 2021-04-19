@@ -19,18 +19,19 @@ export class ChatsService {
     private authService: AuthService
   ) {}
 
-  async createChat(contactEmail: string, contactId: string) {
+  async createChat(contactEmail: string, chatId: string) {
     const currentUser = await this.angularFireAuth.currentUser;
 
     const data = {
       creator: currentUser.email,
       contact: contactEmail,
-      contactId: contactId,
+      chatId: chatId,
       messages: [],
     };
     console.log(JSON.stringify(data));
 
-    const chatRef = await this.angularFirestore.collection('chats').add(data);
+    //add doc with contact id to later us it for sending messages
+    await this.angularFirestore.collection('chats').doc(`${chatId}`).set(data);
   }
 
   async sendMessage(chatId: string, content: string) {
