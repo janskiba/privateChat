@@ -8,6 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { ChatsService } from './chats.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ export class ManageContactsService {
   constructor(
     private angularFirestore: AngularFirestore,
     private authService: AuthService,
-    private angularFireAuth: AngularFireAuth
+    private angularFireAuth: AngularFireAuth,
+    private chatsService: ChatsService
   ) {
     authService.user$.subscribe((user) => {
       if (user) {
@@ -50,13 +52,18 @@ export class ManageContactsService {
       });
   }
 
-  updateContactList(contact) {
+  async updateContactList(contact) {
     const data = {
       displayName: contact.displayName,
       email: contact.email,
     };
 
-    return this.contactsRef.add(data);
+    const ref = await this.contactsRef.add(data);
+
+    //update contact document with a field with its id
+    ref.update({ contactId: ref.id });
+
+    return this.chatsService.createChat(contact.email, ref.id);
   }
 
   getContacts() {
