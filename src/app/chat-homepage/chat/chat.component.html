@@ -1,8 +1,11 @@
 <div class="chat-container">
   <div class="find-contactsInfo" *ngIf="!manageContactsService.clickedContact$">
     <p>
-      Wyszukaj swoich znajomych po ich adresie email lub wybierz z lusty obok
+      Wyszukaj swoich znajomych po ich adresie email lub wybierz z listy obok
       aby zacząć konwersację
     </p>
   </div>
+  <app-send-message
+    *ngIf="manageContactsService.clickedContact$"
+  ></app-send-message>
 </div>

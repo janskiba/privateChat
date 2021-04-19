@@ -11,7 +11,7 @@
         required
         email
       />
-      <button type="submit" mat-icon-button>
+      <button type="submit" mat-icon-button [disabled]="!findForm.valid">
         <mat-icon class="material-icons-outlined md-30">person_add</mat-icon>
       </button>
     </form>
