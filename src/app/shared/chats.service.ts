@@ -55,6 +55,7 @@ export class ChatsService {
     const data = {
       sender: currentUser.email,
       content,
+      createdAt: Date.now(),
     };
     if (currentUser) {
       const ref = this.angularFirestore.collection('chats').doc(chatId);
@@ -66,15 +67,15 @@ export class ChatsService {
   }
 
   getMessagess(contact) {
-    this.currentChat$ = this.angularFirestore
+    return (this.currentChat$ = this.angularFirestore
       .collection<any>('chats')
       .doc(contact.chatId)
       .snapshotChanges()
       .pipe(
         map((doc) => {
           //get data of each change
-          return { ...doc.payload.data() };
+          return { id: doc.payload.id, ...doc.payload.data() };
         })
-      );
+      ));
   }
 }

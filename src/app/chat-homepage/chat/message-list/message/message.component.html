@@ -1,1 +1,9 @@
-<p>{{ childMessage.content }}</p>
+<div
+  class="message-container"
+  *ngIf="authService.user$ | async as loggedInUser"
+  [ngClass]="{ sender: loggedInUser.email == childMessage.sender }"
+>
+  <p class="message">
+    {{ childMessage.content }}
+  </p>
+</div>

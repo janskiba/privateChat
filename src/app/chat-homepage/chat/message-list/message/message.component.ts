@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-message',
@@ -7,9 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MessageComponent implements OnInit {
   @Input() childMessage;
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
-    console.log(this.childMessage);
+    /* console.log(this.childMessage); */
   }
 }
