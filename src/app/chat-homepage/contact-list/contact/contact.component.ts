@@ -19,9 +19,7 @@ export class ContactComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onContactClick(userName: string) {
-    this.manageContactsService.displayClickedContact(userName);
-
-    console.log(userName);
+  onContactClick(contact) {
+    this.manageContactsService.displayClickedContact(contact);
   }
 }

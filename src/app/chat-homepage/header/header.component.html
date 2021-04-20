@@ -15,10 +15,10 @@
   <div class="header-column header-right">
     <div
       class="contact-info"
-      *ngIf="manageContactsService.clickedContact$ | async as contactName"
+      *ngIf="manageContactsService.clickedContact$ | async as contact"
     >
       <mat-icon class="material-icons-outlined md-40">face</mat-icon>
-      <p>{{ contactName }}</p>
+      <p>{{ contact.displayName }}</p>
     </div>
   </div>
 </div>

@@ -6,7 +6,6 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { stringify } from '@angular/compiler/src/util';
 import { disableDebugTools } from '@angular/platform-browser';
 
 @Injectable({
@@ -30,11 +29,31 @@ export class ChatsService {
     };
     console.log(JSON.stringify(data));
 
+    //add currentUser to friend contactlist
+    this.updateFriendContactList(data, currentUser.displayName);
+
     //add doc with contact id to later us it for sending messages
     await this.angularFirestore.collection('chats').doc(`${chatId}`).set(data);
   }
 
+  updateFriendContactList(chatData, contactDisplayname: string) {
+    const data = {
+      chatId: chatData.chatId,
+      displayName: contactDisplayname,
+      email: chatData.creator,
+    };
+
+    const ref = this.angularFirestore
+      .collection('users')
+      .doc(`${chatData.contact}`)
+      .collection('contacts');
+
+    return ref.doc(`${chatData.chatId}`).set(data);
+  }
+
   async sendMessage(chatId: string, content: string) {
+    //add sender to receiver contact list
+
     const currentUser = await this.angularFireAuth.currentUser;
 
     const data = {

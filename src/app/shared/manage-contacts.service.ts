@@ -87,9 +87,10 @@ export class ManageContactsService {
     );
   }
 
-  displayClickedContact(userName: string) {
-    //convert string into observable
-    const obs = of(userName);
-    this.clickedContact$ = obs;
+  displayClickedContact(contact) {
+    console.log(contact);
+    //convert object into observable
+    const obs = of(contact);
+    return (this.clickedContact$ = obs);
   }
 }
