@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-} from '@angular/fire/firestore';
-import { AuthService } from './auth.service';
-import { disableDebugTools } from '@angular/platform-browser';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatsService {
+  //get messages of current chatId
+  currentChat$: Observable<any>;
+
   constructor(
     private angularFirestore: AngularFirestore,
-    private angularFireAuth: AngularFireAuth,
-    private authService: AuthService
+    private angularFireAuth: AngularFireAuth
   ) {}
 
   async createChat(contactEmail: string, chatId: string) {
@@ -42,7 +41,6 @@ export class ChatsService {
       displayName: contactDisplayname,
       email: chatData.creator,
     };
-
     const ref = this.angularFirestore
       .collection('users')
       .doc(`${chatData.contact}`)
@@ -52,22 +50,31 @@ export class ChatsService {
   }
 
   async sendMessage(chatId: string, content: string) {
-    //add sender to receiver contact list
-
+    //add sender to receiver's contact list
     const currentUser = await this.angularFireAuth.currentUser;
-
     const data = {
       sender: currentUser.email,
       content,
     };
-
     if (currentUser) {
       const ref = this.angularFirestore.collection('chats').doc(chatId);
-
       //uses the Firestore arrayUnion method to append a new chat message to document
       return ref.update({
         messages: firebase.firestore.FieldValue.arrayUnion(data),
       });
     }
+  }
+
+  getMessagess(contact) {
+    this.currentChat$ = this.angularFirestore
+      .collection<any>('chats')
+      .doc(contact.chatId)
+      .snapshotChanges()
+      .pipe(
+        map((doc) => {
+          //get data of each change
+          return { ...doc.payload.data() };
+        })
+      );
   }
 }

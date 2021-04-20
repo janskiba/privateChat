@@ -20,7 +20,6 @@ export class ManageContactsService {
   constructor(
     private angularFirestore: AngularFirestore,
     private authService: AuthService,
-    private angularFireAuth: AngularFireAuth,
     private chatsService: ChatsService
   ) {
     authService.user$.subscribe((user) => {
@@ -90,6 +89,7 @@ export class ManageContactsService {
   displayClickedContact(contact) {
     console.log(contact);
     //convert object into observable
+    this.chatsService.getMessagess(contact);
     const obs = of(contact);
     return (this.clickedContact$ = obs);
   }
