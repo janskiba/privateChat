@@ -67,7 +67,8 @@ export class ChatsService {
   }
 
   getMessagess(contact) {
-    return (this.currentChat$ = this.angularFirestore
+    /*     console.log('get messages activated');
+     */ return (this.currentChat$ = this.angularFirestore
       .collection<any>('chats')
       .doc(contact.chatId)
       .snapshotChanges()

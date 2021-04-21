@@ -1,5 +1,21 @@
-app-message {
-  display: block;
+@import "../../../../variables";
+
+.message-container {
+  display: flex;
   width: 100%;
-  height: fit-content;
+  justify-content: flex-start;
+  p {
+    width: fit-content;
+    padding: 10px 20px 10px 10px;
+    margin-top: 10px;
+    background-color: $gray-medium;
+    border-radius: $border-radius;
+  }
+}
+
+.sender {
+  justify-content: flex-end;
+  p {
+    background-color: $blue;
+  }
 }

@@ -16,7 +16,7 @@ import { switchMap, first, map } from 'rxjs/operators';
 })
 export class AuthService {
   //user firestore reference
-  user$: Observable<any>;
+  user$: Observable<any> = null;
   constructor(
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore,

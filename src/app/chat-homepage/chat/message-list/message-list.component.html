@@ -1,9 +1,22 @@
-<div
-  *ngIf="chatsService.currentChat$ | async as currentChat"
-  class="messages-list"
->
-  <app-message
-    *ngFor="let message of currentChat.messages"
-    [childMessage]="message"
-  ></app-message>
+<div class="nwm" *ngIf="authService.user$ | async as user">
+  <div
+    *ngIf="chatsService.currentChat$ | async as currentChat"
+    class="message-list"
+  >
+    <!-- <app-message
+      *ngFor="let message of currentChat.messages"
+      [childMessage]="message"
+      [ngClass]="{ sender: user.email == message.sender }"
+    ></app-message> -->
+
+    <div
+      class="message-container"
+      *ngFor="let message of currentChat.messages"
+      [ngClass]="{ sender: user.email == message.sender }"
+    >
+      <p class="message">
+        {{ message.content }}
+      </p>
+    </div>
+  </div>
 </div>

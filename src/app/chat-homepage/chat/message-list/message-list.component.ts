@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
 
 @Component({
@@ -8,7 +9,10 @@ import { ChatsService } from 'src/app/shared/chats.service';
   styleUrls: ['./message-list.component.scss'],
 })
 export class MessageListComponent implements OnInit {
-  constructor(public chatsService: ChatsService) {}
+  constructor(
+    public chatsService: ChatsService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {}
 }
