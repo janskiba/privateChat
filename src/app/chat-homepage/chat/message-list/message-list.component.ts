@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
 

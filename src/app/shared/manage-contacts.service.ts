@@ -58,7 +58,6 @@ export class ManageContactsService {
     };
 
     const ref = await this.contactsRef.add(data);
-
     //update contact document with a field with its id
     ref.update({ chatId: ref.id });
 
