@@ -18,10 +18,7 @@
     </form>
   </div>
   <mat-selection-list #contacts [multiple]="false">
-    <mat-list-option
-      *ngFor="let contact of contacts$ | async"
-      [value]="contact"
-    >
+    <mat-list-option *ngFor="let contact of contactList" [value]="contact">
       <app-contact [childContact]="contact"></app-contact>
     </mat-list-option>
   </mat-selection-list>
