@@ -25,7 +25,6 @@ import { ChatComponent } from './chat-homepage/chat/chat.component';
 import { ContactComponent } from './chat-homepage/contact-list/contact/contact.component';
 import { SendMessageComponent } from './chat-homepage/chat/send-message/send-message.component';
 import { MessageListComponent } from './chat-homepage/chat/message-list/message-list.component';
-import { MessageComponent } from './chat-homepage/chat/message-list/message/message.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -42,7 +41,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     ContactComponent,
     SendMessageComponent,
     MessageListComponent,
-    MessageComponent,
   ],
   imports: [
     BrowserModule,

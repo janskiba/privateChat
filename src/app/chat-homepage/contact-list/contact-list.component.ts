@@ -10,18 +10,31 @@ import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
   styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent implements OnInit {
-  contacts$: Observable<any>;
+  contactList = [];
 
   constructor(private manageContactsService: ManageContactsService) {}
 
   ngOnInit(): void {
-    //subscribe to contacts$ in the template
-    this.contacts$ = this.manageContactsService.getContacts();
+    this.getContacts();
+  }
+
+  getContacts() {
+    this.manageContactsService.getContacts().subscribe((value) => {
+      this.contactList = value;
+    });
   }
 
   findContact(form: NgForm) {
     const contact: string = form.value.email;
-    this.manageContactsService.findContact(contact);
+
+    //cheks if user is on contact list
+    this.contactList.forEach((user) => {
+      if (user.email != contact)
+        this.manageContactsService.findContact(contact);
+      else {
+        console.log('user is on your contact list');
+      }
+    });
     form.resetForm();
   }
 }

@@ -1,0 +1,35 @@
+@import "../../../../variables";
+
+.message-list-container {
+  height: 720px;
+  position: relative;
+
+  .message-list {
+    position: absolute;
+    bottom: 0;
+    max-height: 100%;
+    width: 70%;
+    padding: 0 15%;
+    overflow: auto;
+
+    .message-container {
+      display: flex;
+      justify-content: flex-start;
+      p {
+        width: fit-content;
+        max-width: 60%;
+        padding: 10px 20px 10px 10px;
+        margin-top: 10px;
+        background-color: $gray-medium;
+        border-radius: $border-radius;
+      }
+    }
+
+    .sender {
+      justify-content: flex-end;
+      p {
+        background-color: $blue;
+      }
+    }
+  }
+}

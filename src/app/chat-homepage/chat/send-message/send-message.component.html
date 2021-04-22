@@ -1,9 +1,14 @@
-<form #sendMessage="ngForm" (ngSubmit)="onSubmit(sendMessage)">
+<form
+  #sendMessage="ngForm"
+  *ngIf="manageContactsService.clickedContact$ | async as contact"
+  (ngSubmit)="onSubmit(sendMessage, contact)"
+>
   <input
     type="text"
     name="message"
     required
     placeholder="Wpisz wiadomość"
+    autocomplete="off"
     ngModel
   />
   <button type="submit" mat-icon-button [disabled]="!sendMessage.valid">
