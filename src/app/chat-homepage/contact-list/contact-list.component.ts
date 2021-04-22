@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 
@@ -9,8 +9,9 @@ import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.scss'],
 })
-export class ContactListComponent implements OnInit {
+export class ContactListComponent implements OnInit, OnDestroy {
   contactList = [];
+  subsciption: Subscription;
 
   constructor(private manageContactsService: ManageContactsService) {}
 
@@ -18,10 +19,16 @@ export class ContactListComponent implements OnInit {
     this.getContacts();
   }
 
+  ngOnDestroy() {
+    this.subsciption.unsubscribe();
+  }
+
   getContacts() {
-    this.manageContactsService.getContacts().subscribe((value) => {
-      this.contactList = value;
-    });
+    this.subsciption = this.manageContactsService
+      .getContacts()
+      .subscribe((value) => {
+        this.contactList = value;
+      });
   }
 
   findContact(form: NgForm) {
