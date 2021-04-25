@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 import { switchMap, first, map } from 'rxjs/operators';
+import { SignalStoreService } from '../signal/signal-store.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ export class AuthService {
   constructor(
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private signalStoreService: SignalStoreService
   ) {
     console.log('authservice works');
     //listening to the angularfire authState (currently authenticated user) and grabbing related user document with their profail information
@@ -93,20 +95,49 @@ export class AuthService {
     this.updateUserData(data);
   }
 
-  private updateUserData(user) {
+  private async updateUserData(user) {
+    /*     const signalKeys = await this.signalStoreService.creatId(); */
+
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
       `users/${user.email}`
     );
 
-    const data = {
+    /*     const data = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
+      signalKeys,
     };
+ */
+
+    this.angularFirestore
+      .collection('users')
+      .doc(`${user.email}`)
+      .get()
+      .subscribe(async (doc) => {
+        if (doc.exists) {
+          const data = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          };
+          return userRef.set(data, { merge: true });
+        } else {
+          const signalKeys = await this.signalStoreService.creatId();
+          console.log(signalKeys);
+          const data = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            signalKeys,
+          };
+          return userRef.set(data, { merge: true });
+        }
+      });
 
     this.router.navigate(['/user-homepage']);
-
-    return userRef.set(data, { merge: true });
   }
 }
