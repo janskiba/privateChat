@@ -34,14 +34,17 @@ export class ContactListComponent implements OnInit, OnDestroy {
   findContact(form: NgForm) {
     const contact: string = form.value.email;
 
-    //cheks if user is on contact list
-    this.contactList.forEach((user) => {
-      if (user.email != contact)
-        this.manageContactsService.findContact(contact);
-      else {
-        console.log('user is on your contact list');
-      }
-    });
+    //cheks if contact email is on contact list
+    //some returns true if does
+    const exists = this.contactList.some((user) => user.email === contact);
+
+    if (!exists) {
+      this.manageContactsService.findContact(contact);
+      console.log('succesfully added contact');
+    } else {
+      alert('user is already on your contacts list');
+    }
+
     form.resetForm();
   }
 }
