@@ -11,6 +11,7 @@ import {
   PreKeyType,
   SessionCipher,
   MessageType,
+  KeyPairType,
 } from '@privacyresearch/libsignal-protocol-typescript';
 import { SignalProtocolStore } from './store';
 
@@ -18,33 +19,29 @@ import { SignalProtocolStore } from './store';
   providedIn: 'root',
 })
 export class SignalStoreService {
-  constructor(
-    private signalProtocolStore: SignalProtocolStore,
-    private angularFirestore: AngularFirestore
-  ) {}
+  private store = {};
+
+  constructor() {}
 
   async creatId() {
     //generate registrationId and IdentityKeyPair
     const registrationId = KeyHelper.generateRegistrationId();
-    this.storeKeys(`registrationID`, registrationId);
+    this.store['registrationId'] = registrationId;
 
     const identityKeyPair = await KeyHelper.generateIdentityKeyPair();
-    this.storeKeys('identityKey', identityKeyPair);
+    this.store['identityKeyPair'] = identityKeyPair;
 
     //generate a one-time use prekey and a signed pre-key, storing both locally
     const baseKeyId = Math.floor(10000 * Math.random()); //beetwen 1 and 10000
     const preKey = await KeyHelper.generatePreKey(baseKeyId);
-    this.signalProtocolStore.storePreKey(`${baseKeyId}`, preKey.keyPair);
+    this.storePreKey(`${baseKeyId}`, preKey.keyPair);
 
     const signedPreKeyId = Math.floor(10000 * Math.random());
     const signedPreKey = await KeyHelper.generateSignedPreKey(
       identityKeyPair,
       signedPreKeyId
     );
-    this.signalProtocolStore.storeSignedPreKey(
-      signedPreKeyId,
-      signedPreKey.keyPair
-    );
+    this.storeSignedPreKey(signedPreKeyId, signedPreKey.keyPair);
 
     //store the associated public keys and signatures
     const publicSignedPreKey: SignedPublicPreKeyType = {
@@ -75,12 +72,22 @@ export class SignalStoreService {
     };
 
     this.convertToBase64(publicData);
+    console.log(this.store);
     return publicData;
   }
 
-  //stores RegistrationId and IdentityKeyPair
-  storeKeys(key: string, value: any) {
-    this.signalProtocolStore.put(key, value);
+  async storePreKey(
+    keyId: number | string,
+    keyPair: KeyPairType
+  ): Promise<void> {
+    this.store['25519KeypreKey' + keyId] = keyPair;
+  }
+
+  async storeSignedPreKey(
+    keyId: number | string,
+    keyPair: KeyPairType
+  ): Promise<void> {
+    this.store['25519KeysignedKey' + keyId] = keyPair;
   }
 
   convertToBase64(data) {

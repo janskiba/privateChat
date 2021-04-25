@@ -14,25 +14,14 @@ import { ChatsService } from './chats.service';
   providedIn: 'root',
 })
 export class ManageContactsService {
-  contactsRef: AngularFirestoreCollection<any> = null;
   clickedContact$: Observable<any>;
 
   constructor(
     private angularFirestore: AngularFirestore,
+    private angularFireAuth: AngularFireAuth,
     private authService: AuthService,
     private chatsService: ChatsService
-  ) {
-    authService.user$.subscribe((user) => {
-      if (user) {
-        this.contactsRef = angularFirestore
-          .collection('users')
-          .doc(`${user.email}`)
-          .collection('contacts');
-      } else {
-        console.log('user not signed in');
-      }
-    });
-  }
+  ) {}
 
   findContact(contact) {
     //check if in users collection exist wanted contact
@@ -46,18 +35,25 @@ export class ManageContactsService {
           return this.updateContactList(doc.data());
         } else {
           // doc.data() will be undefined in this case
-          console.log('No such user!');
+          alert('No such user!');
         }
       });
   }
 
   async updateContactList(contact) {
+    const currentUser = (await this.angularFireAuth.currentUser).email;
+
+    const contactsRef = this.angularFirestore
+      .collection('users')
+      .doc(`${currentUser}`)
+      .collection('contacts');
+
     const data = {
       displayName: contact.displayName,
       email: contact.email,
     };
 
-    const ref = await this.contactsRef.add(data);
+    const ref = await contactsRef.add(data);
 
     //update contact document with a field with its id
     ref.update({ chatId: ref.id });

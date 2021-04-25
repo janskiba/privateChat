@@ -102,26 +102,29 @@ export class AuthService {
       `users/${user.email}`
     );
 
-    /*     const data = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      signalKeys,
-    };
- */
-
     this.angularFirestore
       .collection('users')
       .doc(`${user.email}`)
       .get()
       .subscribe(async (doc) => {
         if (doc.exists) {
+          //zakomentowane do testów, póżniej odkomentu i usuc poniższe
+          /* const data = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          };
+          return userRef.set(data, { merge: true }); */
+
+          const signalKeys = await this.signalStoreService.creatId();
+          console.log(signalKeys);
           const data = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
+            signalKeys,
           };
           return userRef.set(data, { merge: true });
         } else {
