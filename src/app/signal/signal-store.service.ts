@@ -16,7 +16,6 @@ import {
   DeviceType,
 } from '@privacyresearch/libsignal-protocol-typescript';
 import { User } from '../shared/user.model';
-import { SignalProtocolStore } from './store';
 
 @Injectable({
   providedIn: 'root',

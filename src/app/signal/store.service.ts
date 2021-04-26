@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import {
   StorageType,
@@ -58,7 +57,7 @@ type StoreValue =
 @Injectable({
   providedIn: 'root',
 })
-export class SignalProtocolStore implements StorageType {
+export class StoreService {
   private _store: Record<string, StoreValue>;
 
   constructor() {
@@ -111,6 +110,7 @@ export class SignalProtocolStore implements StorageType {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _direction: Direction
   ): Promise<boolean> {
+    debugger;
     if (identifier === null || identifier === undefined) {
       throw new Error('tried to check identity key for undefined/null key');
     }
