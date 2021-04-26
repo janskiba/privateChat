@@ -77,5 +77,28 @@ export class SignalStoreService {
         publicKey: publicPreKey.publicKey, //to convert
       },
     };
+    this.convertToBase64(publicData);
+    return publicData;
+  }
+
+  convertToBase64(data) {
+    data.identityPubKey = this.arrayBufferToBase64(data.identityPubKey);
+    data.signedPreKey.publicKey = this.arrayBufferToBase64(
+      data.signedPreKey.publicKey
+    );
+    data.signedPreKey.signature = this.arrayBufferToBase64(
+      data.signedPreKey.signature
+    );
+    data.preKey.publicKey = this.arrayBufferToBase64(data.preKey.publicKey);
+  }
+
+  arrayBufferToBase64(buffer) {
+    let binary = '';
+    let bytes = new Uint8Array(buffer);
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
   }
 }

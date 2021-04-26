@@ -126,7 +126,7 @@ export class AuthService {
           };
           return userRef.set(data, { merge: true }); */
         } else {
-          const preKeyBundle = await this.signalStoreService.creatId();
+          const preKeyBundle = await this.signalStoreService.createId();
           console.log(preKeyBundle);
           const data = {
             uid: user.uid,
