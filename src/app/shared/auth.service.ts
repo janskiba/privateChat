@@ -96,8 +96,6 @@ export class AuthService {
   }
 
   private async updateUserData(user) {
-    /*     const signalKeys = await this.signalStoreService.creatId(); */
-
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
       `users/${user.email}`
     );
@@ -109,26 +107,15 @@ export class AuthService {
       .subscribe(async (doc) => {
         if (doc.exists) {
           //zakomentowane do testów, póżniej odkomentu i usuc poniższe
-          /* const data = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-          };
-          return userRef.set(data, { merge: true }); */
-
-          const signalKeys = await this.signalStoreService.creatId();
-          console.log(signalKeys);
           const data = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
-            signalKeys,
           };
           return userRef.set(data, { merge: true });
-        } else {
-          const signalKeys = await this.signalStoreService.creatId();
+
+          /* const signalKeys = await this.signalStoreService.creatId();
           console.log(signalKeys);
           const data = {
             uid: user.uid,
@@ -136,6 +123,17 @@ export class AuthService {
             displayName: user.displayName,
             photoURL: user.photoURL,
             signalKeys,
+          };
+          return userRef.set(data, { merge: true }); */
+        } else {
+          const preKeyBundle = await this.signalStoreService.creatId();
+          console.log(preKeyBundle);
+          const data = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            preKeyBundle,
           };
           return userRef.set(data, { merge: true });
         }
