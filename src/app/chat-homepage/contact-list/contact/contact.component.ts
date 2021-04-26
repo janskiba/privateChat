@@ -22,7 +22,6 @@ export class ContactComponent implements OnInit {
 
   onContactClick(contact) {
     this.manageContactsService.displayClickedContact(contact);
-    /*     this.signalStoreService.getPreKeyBundle(contact.email);
-     */
+    this.signalStoreService.getPreKeyBundle(contact.email);
   }
 }

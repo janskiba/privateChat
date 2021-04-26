@@ -87,10 +87,12 @@ export class StoreService {
     )
       throw new Error('Tried to store undefined/null');
     this._store[key] = value;
+    console.log(this._store);
   }
 
   async getIdentityKeyPair(): Promise<KeyPairType | undefined> {
     const kp = this.get('identityKey', undefined);
+    console.log(kp);
     if (isKeyPairType(kp) || typeof kp === 'undefined') {
       return kp;
     }
@@ -110,8 +112,8 @@ export class StoreService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _direction: Direction
   ): Promise<boolean> {
-    debugger;
-    if (identifier === null || identifier === undefined) {
+    /*     debugger;
+     */ if (identifier === null || identifier === undefined) {
       throw new Error('tried to check identity key for undefined/null key');
     }
     const trusted = this.get('identityKey' + identifier, undefined);

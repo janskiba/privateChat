@@ -24,31 +24,58 @@ import { StoreService } from './store.service';
 export class SignalStoreService {
   loggedInUserStore = new StoreService();
   contactStore = new StoreService();
+  constactPreKeyBundle = {};
+
+  starterMessageBytes = Uint8Array.from([
+    0xce,
+    0x93,
+    0xce,
+    0xb5,
+    0xce,
+    0xb9,
+    0xce,
+    0xac,
+    0x20,
+    0xcf,
+    0x83,
+    0xce,
+    0xbf,
+    0xcf,
+    0x85,
+  ]);
 
   constructor(
     private angularfirestore: AngularFirestore,
     private storeService: StoreService
   ) {}
 
+  sendMessage(to: string, from: string, message: MessageType) {
+    /* const msg = { to, from, message, delivered: false, id: getNewMessageID() }; */
+    console.log(message);
+  }
+
   async createId() {
     //generate registrationId and IdentityKeyPair
     const registrationId = KeyHelper.generateRegistrationId();
-    this.storeService.put(`registrationID`, registrationId);
+    this.loggedInUserStore.put(`registrationID`, registrationId);
 
     const identityKeyPair = await KeyHelper.generateIdentityKeyPair();
-    this.storeService.put('identityKey', identityKeyPair);
+    this.loggedInUserStore.put('identityKey', identityKeyPair);
 
     //generate a one-time use prekey and a signed pre-key, storing both locally
     const baseKeyId = Math.floor(10000 * Math.random()); //beetwen 1 and 10000
     const preKey = await KeyHelper.generatePreKey(baseKeyId);
-    this.storeService.storePreKey(`${baseKeyId}`, preKey.keyPair);
+    this.loggedInUserStore.storePreKey(`${baseKeyId}`, preKey.keyPair);
 
     const signedPreKeyId = Math.floor(10000 * Math.random());
     const signedPreKey = await KeyHelper.generateSignedPreKey(
       identityKeyPair,
       signedPreKeyId
     );
-    this.storeService.storeSignedPreKey(signedPreKeyId, signedPreKey.keyPair);
+    this.loggedInUserStore.storeSignedPreKey(
+      signedPreKeyId,
+      signedPreKey.keyPair
+    );
 
     //store the associated public keys and signatures
     const publicSignedPreKey: SignedPublicPreKeyType = {
@@ -92,6 +119,70 @@ export class SignalStoreService {
     data.preKey.publicKey = this.arrayBufferToBase64(data.preKey.publicKey);
   }
 
+  //get preKeyBundle from a server and convert it to ArrayBuffer
+  getPreKeyBundle(email: string) {
+    this.angularfirestore
+      .collection('users')
+      .doc(`${email}`)
+      .get()
+      .subscribe(async (result) => {
+        if (result.exists) {
+          this.constactPreKeyBundle = await result.data()['preKeyBundle'];
+          console.log(this.loggedInUserStore);
+
+          this.constactPreKeyBundle[
+            'identityPubKey'
+          ] = this.base64ToArrayBuffer(
+            this.constactPreKeyBundle['identityPubKey']
+          );
+          this.constactPreKeyBundle[
+            'signedPreKey'
+          ].publicKey = this.base64ToArrayBuffer(
+            this.constactPreKeyBundle['signedPreKey'].publicKey
+          );
+          this.constactPreKeyBundle[
+            'signedPreKey'
+          ].signature = this.base64ToArrayBuffer(
+            this.constactPreKeyBundle['signedPreKey'].signature
+          );
+          this.constactPreKeyBundle[
+            'preKey'
+          ].publicKey = this.base64ToArrayBuffer(
+            this.constactPreKeyBundle['preKey'].publicKey
+          );
+          console.log(this.constactPreKeyBundle);
+          this.startSession(email);
+        } else console.log('no such documents');
+      });
+  }
+
+  async startSession(email: string) {
+    const recipientAddress = await new SignalProtocolAddress(`${email}`, 1);
+    const sessionBuilder = new SessionBuilder(
+      this.loggedInUserStore,
+      recipientAddress
+    );
+
+    const preKeyBundle: DeviceType | undefined = {
+      identityKey: this.constactPreKeyBundle['identityPubKey'],
+      signedPreKey: this.constactPreKeyBundle['signedPreKey'],
+      preKey: this.constactPreKeyBundle['preKey'],
+      registrationId: this.constactPreKeyBundle['registrationId'],
+    };
+    console.log(JSON.stringify(preKeyBundle));
+    await sessionBuilder.processPreKey(preKeyBundle!);
+
+    const loggedInUserCipher = new SessionCipher(
+      this.loggedInUserStore,
+      recipientAddress
+    );
+    const ciphertext = await loggedInUserCipher.encrypt(
+      this.starterMessageBytes.buffer
+    );
+
+    this.sendMessage('user1', 'user2', ciphertext);
+  }
+
   arrayBufferToBase64(buffer) {
     let binary = '';
     let bytes = new Uint8Array(buffer);
@@ -100,5 +191,15 @@ export class SignalStoreService {
       binary += String.fromCharCode(bytes[i]);
     }
     return window.btoa(binary);
+  }
+
+  base64ToArrayBuffer(base64) {
+    let binary_string = window.atob(base64);
+    let len = binary_string.length;
+    let bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 }
