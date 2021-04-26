@@ -25,10 +25,7 @@ export class SignalStoreService {
   private store = {};
   private contactPreKeyBundle = {};
   private recipientStore: StorageType;
-  constructor(
-    private angularfirestore: AngularFirestore,
-    private signalProtocolStore: SignalProtocolStore
-  ) {}
+  constructor(private angularfirestore: AngularFirestore) {}
 
   async creatId() {
     //generate registrationId and IdentityKeyPair
