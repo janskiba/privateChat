@@ -47,7 +47,7 @@ export class SignalStoreService {
   constructor(
     private angularfirestore: AngularFirestore,
     private storeService: StoreService
-  ) {}
+  ) { }
 
   sendMessage(to: string, from: string, message: MessageType) {
     /* const msg = { to, from, message, delivered: false, id: getNewMessageID() }; */
@@ -180,8 +180,37 @@ export class SignalStoreService {
       this.starterMessageBytes.buffer
     );
 
-    this.sendMessage('user1', 'user2', ciphertext);
+    const message = 'Hello word';
+
+    const log = loggedInUserCipher.encrypt(
+      new TextEncoder().encode(message).buffer
+    ).then(
+      result => {
+        console.log('message: ' + message)
+        console.log('encrypted message: ' + result.body)
+      }
+    );
+
+
+
+    /* this.sendMessage('user1', 'user2', ciphertext); */
+
+    /* const cipher = new SessionCipher(this.contactStore, 'user1@email.com');
+    const ciphertext2 = await cipher.encrypt(
+      new TextEncoder().encode('message').buffer
+    );
+    this.sendMessage('to', 'test', ciphertext);
+    this.sendMessage('to', 'test', ciphertext2); */
   }
+
+  /* async encryptAndSendMessage(to: string, message: string) {
+    const cipher = new SessionCipher(this.contactStore, recipientAddress);
+    const ciphertext = await cipher.encrypt(
+      new TextEncoder().encode(message).buffer
+    );
+    console.log(message);
+    this.sendMessage(to, 'test', ciphertext);
+  } */
 
   arrayBufferToBase64(buffer) {
     let binary = '';
