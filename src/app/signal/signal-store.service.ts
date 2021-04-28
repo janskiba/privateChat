@@ -15,6 +15,7 @@ import {
   KeyPairType,
   DeviceType,
 } from '@privacyresearch/libsignal-protocol-typescript';
+import { ChatsService } from '../shared/chats.service';
 import { User } from '../shared/user.model';
 import { StoreService } from './store.service';
 
@@ -26,27 +27,12 @@ export class SignalStoreService {
   contactStore = new StoreService();
   constactPreKeyBundle = {};
 
-  starterMessageBytes = Uint8Array.from([
-    0xce,
-    0x93,
-    0xce,
-    0xb5,
-    0xce,
-    0xb9,
-    0xce,
-    0xac,
-    0x20,
-    0xcf,
-    0x83,
-    0xce,
-    0xbf,
-    0xcf,
-    0x85,
-  ]);
+  recipientAddress: SignalProtocolAddress;
 
   constructor(
     private angularfirestore: AngularFirestore,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private chatsService: ChatsService
   ) { }
 
   sendMessage(to: string, from: string, message: MessageType) {
@@ -120,7 +106,7 @@ export class SignalStoreService {
   }
 
   //get preKeyBundle from a server and convert it to ArrayBuffer
-  getPreKeyBundle(email: string) {
+  getPreKeyBundle(email: string, chatId: string) {
     this.angularfirestore
       .collection('users')
       .doc(`${email}`)
@@ -151,18 +137,19 @@ export class SignalStoreService {
             this.constactPreKeyBundle['preKey'].publicKey
           );
           console.log(this.constactPreKeyBundle);
-          this.startSession(email);
+          this.startSession(chatId);
         } else console.log('no such documents');
       });
   }
 
-  async startSession(email: string) {
-    const recipientAddress = await new SignalProtocolAddress(`${email}`, 1);
+  async startSession(chatId: string) {
+    this.recipientAddress = await new SignalProtocolAddress(`${chatId}`, 1);
     const sessionBuilder = new SessionBuilder(
       this.loggedInUserStore,
-      recipientAddress
+      this.recipientAddress
     );
 
+    //contact pre key bundle
     const preKeyBundle: DeviceType | undefined = {
       identityKey: this.constactPreKeyBundle['identityPubKey'],
       signedPreKey: this.constactPreKeyBundle['signedPreKey'],
@@ -172,11 +159,11 @@ export class SignalStoreService {
     console.log(JSON.stringify(preKeyBundle));
     await sessionBuilder.processPreKey(preKeyBundle!);
 
-    const loggedInUserCipher = new SessionCipher(
+    /* const loggedInUserCipher = new SessionCipher(
       this.loggedInUserStore,
       recipientAddress
-    );
-    const ciphertext = await loggedInUserCipher.encrypt(
+    ); */
+    /* const ciphertext = await loggedInUserCipher.encrypt(
       this.starterMessageBytes.buffer
     );
 
@@ -189,7 +176,7 @@ export class SignalStoreService {
         console.log('message: ' + message)
         console.log('encrypted message: ' + result.body)
       }
-    );
+    ); */
 
 
 
@@ -211,6 +198,22 @@ export class SignalStoreService {
     console.log(message);
     this.sendMessage(to, 'test', ciphertext);
   } */
+
+  getSessionCipher(chatId: string) {
+    return new SessionCipher(this.loggedInUserStore, this.recipientAddress);
+  }
+
+  encryptAndSendMessage(chatId: string, message: string) {
+    this.getSessionCipher(chatId).encrypt(
+      new TextEncoder().encode(message).buffer
+    ).then(
+      cipherText => {
+        console.log('message: ' + message);
+        console.log('encrypted message: ' + cipherText.body);
+        this.chatsService.sendMessage(chatId, cipherText.body);
+      }
+    ).catch(err => console.log(err));
+  }
 
   arrayBufferToBase64(buffer) {
     let binary = '';

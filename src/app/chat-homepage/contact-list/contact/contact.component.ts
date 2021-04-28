@@ -16,12 +16,12 @@ export class ContactComponent implements OnInit {
     private authService: AuthService,
     private manageContactsService: ManageContactsService,
     private signalStoreService: SignalStoreService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onContactClick(contact) {
     this.manageContactsService.displayClickedContact(contact);
-    this.signalStoreService.getPreKeyBundle(contact.email);
+    this.signalStoreService.getPreKeyBundle(contact.email, contact.chatId);
   }
 }
