@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
-import { SignalStoreService } from 'src/app/signal/signal-store.service';
+import { SignalService } from 'src/app/signal/signal.service';
 
 @Component({
   selector: 'app-contact',
@@ -15,13 +15,13 @@ export class ContactComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private manageContactsService: ManageContactsService,
-    private signalStoreService: SignalStoreService
+    private SignalService: SignalService
   ) { }
 
   ngOnInit(): void { }
 
   onContactClick(contact) {
     this.manageContactsService.displayClickedContact(contact);
-    this.signalStoreService.getPreKeyBundle(contact.email, contact.chatId);
+    this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
   }
 }

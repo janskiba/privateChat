@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/auth.service';
-import { SignalStoreService } from 'src/app/signal/signal-store.service';
+import { SignalService } from 'src/app/signal/signal.service';
 
 @Component({
   selector: 'app-choose-sigin-method',
@@ -10,8 +10,8 @@ import { SignalStoreService } from 'src/app/signal/signal-store.service';
 export class ChooseSiginMethodComponent implements OnInit {
   constructor(
     public authService: AuthService,
-    public signalStoreService: SignalStoreService
-  ) {}
+    public SignalService: SignalService
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

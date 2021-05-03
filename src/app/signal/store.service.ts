@@ -112,8 +112,8 @@ export class StoreService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _direction: Direction
   ): Promise<boolean> {
-    /*     debugger;
-     */ if (identifier === null || identifier === undefined) {
+    // debugger;
+    if (identifier === null || identifier === undefined) {
       throw new Error('tried to check identity key for undefined/null key');
     }
     const trusted = this.get('identityKey' + identifier, undefined);
@@ -124,7 +124,7 @@ export class StoreService {
     }
     return Promise.resolve(
       arrayBufferToString(identityKey) ===
-        arrayBufferToString(trusted as ArrayBuffer)
+      arrayBufferToString(trusted as ArrayBuffer)
     );
   }
   async loadPreKey(keyId: string | number): Promise<KeyPairType | undefined> {
@@ -181,7 +181,7 @@ export class StoreService {
     if (
       existing &&
       arrayBufferToString(identityKey) !==
-        arrayBufferToString(existing as ArrayBuffer)
+      arrayBufferToString(existing as ArrayBuffer)
     ) {
       return true;
     } else {

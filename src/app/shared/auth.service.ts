@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 import { switchMap, first, map } from 'rxjs/operators';
-import { SignalStoreService } from '../signal/signal-store.service';
+import { SignalService } from '../signal/signal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class AuthService {
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore,
     private router: Router,
-    private signalStoreService: SignalStoreService
+    private SignalService: SignalService
   ) {
     console.log('authservice works');
     //listening to the angularfire authState (currently authenticated user) and grabbing related user document with their profail information
@@ -115,7 +115,7 @@ export class AuthService {
           };
           return userRef.set(data, { merge: true }); */
 
-          const preKeyBundle = await this.signalStoreService.createId();
+          const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);
           const data = {
             uid: user.uid,
@@ -126,7 +126,7 @@ export class AuthService {
           };
           return userRef.set(data, { merge: true });
         } else {
-          const preKeyBundle = await this.signalStoreService.createId();
+          const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);
           const data = {
             uid: user.uid,

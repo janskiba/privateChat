@@ -8,8 +8,13 @@
       *ngFor="let message of currentChat.messages"
       [ngClass]="{ sender: user.email == message.sender }"
     >
-      <p class="message">
-        {{ message.content }}
+      <p class="message" *ngIf="user.email == message.sender">
+        <!-- {{ SignalService.decryptMessage(message.content) }} -->
+        {{ message.content.body }}
+      </p>
+
+      <p class="message" *ngIf="user.email != message.sender">
+        {{ SignalService.decryptMessage(message.content) }}
       </p>
     </div>
   </div>

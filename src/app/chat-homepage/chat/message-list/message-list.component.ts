@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
+import { SignalService } from 'src/app/signal/signal.service';
 
 @Component({
   selector: 'app-message-list',
@@ -10,8 +11,9 @@ import { ChatsService } from 'src/app/shared/chats.service';
 export class MessageListComponent implements OnInit {
   constructor(
     public chatsService: ChatsService,
-    public authService: AuthService
-  ) {}
+    public authService: AuthService,
+    public SignalService: SignalService
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

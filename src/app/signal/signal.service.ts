@@ -15,6 +15,7 @@ import {
   KeyPairType,
   DeviceType,
 } from '@privacyresearch/libsignal-protocol-typescript';
+
 import { ChatsService } from '../shared/chats.service';
 import { User } from '../shared/user.model';
 import { StoreService } from './store.service';
@@ -22,7 +23,7 @@ import { StoreService } from './store.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SignalStoreService {
+export class SignalService {
   loggedInUserStore = new StoreService();
   contactStore = new StoreService();
   constactPreKeyBundle = {};
@@ -31,14 +32,8 @@ export class SignalStoreService {
 
   constructor(
     private angularfirestore: AngularFirestore,
-    private storeService: StoreService,
     private chatsService: ChatsService
   ) { }
-
-  sendMessage(to: string, from: string, message: MessageType) {
-    /* const msg = { to, from, message, delivered: false, id: getNewMessageID() }; */
-    console.log(message);
-  }
 
   async createId() {
     //generate registrationId and IdentityKeyPair
@@ -94,16 +89,6 @@ export class SignalStoreService {
     return publicData;
   }
 
-  convertToBase64(data) {
-    data.identityPubKey = this.arrayBufferToBase64(data.identityPubKey);
-    data.signedPreKey.publicKey = this.arrayBufferToBase64(
-      data.signedPreKey.publicKey
-    );
-    data.signedPreKey.signature = this.arrayBufferToBase64(
-      data.signedPreKey.signature
-    );
-    data.preKey.publicKey = this.arrayBufferToBase64(data.preKey.publicKey);
-  }
 
   //get preKeyBundle from a server and convert it to ArrayBuffer
   getPreKeyBundle(email: string, chatId: string) {
@@ -137,13 +122,14 @@ export class SignalStoreService {
             this.constactPreKeyBundle['preKey'].publicKey
           );
           console.log(this.constactPreKeyBundle);
-          this.startSession(chatId);
+          //this.startSession(email);
         } else console.log('no such documents');
       });
   }
 
-  async startSession(chatId: string) {
-    this.recipientAddress = await new SignalProtocolAddress(`${chatId}`, 1);
+  async startSession(email: string) {
+    this.recipientAddress = new SignalProtocolAddress(email, 1);
+    console.log(this.recipientAddress);
     const sessionBuilder = new SessionBuilder(
       this.loggedInUserStore,
       this.recipientAddress
@@ -156,63 +142,56 @@ export class SignalStoreService {
       preKey: this.constactPreKeyBundle['preKey'],
       registrationId: this.constactPreKeyBundle['registrationId'],
     };
-    console.log(JSON.stringify(preKeyBundle));
+    console.log('contact pre key bundle: ' + preKeyBundle);
     await sessionBuilder.processPreKey(preKeyBundle!);
+  }
 
-    /* const loggedInUserCipher = new SessionCipher(
+  async encryptAndSendMessage(contact, message: string) {
+
+    await this.startSession(contact.email);
+    const loggedInUserCipher = new SessionCipher(
       this.loggedInUserStore,
-      recipientAddress
-    ); */
-    /* const ciphertext = await loggedInUserCipher.encrypt(
-      this.starterMessageBytes.buffer
+      this.recipientAddress
     );
 
-    const message = 'Hello word';
-
-    const log = loggedInUserCipher.encrypt(
+    loggedInUserCipher.encrypt(
       new TextEncoder().encode(message).buffer
     ).then(
-      result => {
-        console.log('message: ' + message)
-        console.log('encrypted message: ' + result.body)
-      }
-    ); */
-
-
-
-    /* this.sendMessage('user1', 'user2', ciphertext); */
-
-    /* const cipher = new SessionCipher(this.contactStore, 'user1@email.com');
-    const ciphertext2 = await cipher.encrypt(
-      new TextEncoder().encode('message').buffer
-    );
-    this.sendMessage('to', 'test', ciphertext);
-    this.sendMessage('to', 'test', ciphertext2); */
-  }
-
-  /* async encryptAndSendMessage(to: string, message: string) {
-    const cipher = new SessionCipher(this.contactStore, recipientAddress);
-    const ciphertext = await cipher.encrypt(
-      new TextEncoder().encode(message).buffer
-    );
-    console.log(message);
-    this.sendMessage(to, 'test', ciphertext);
-  } */
-
-  getSessionCipher(chatId: string) {
-    return new SessionCipher(this.loggedInUserStore, this.recipientAddress);
-  }
-
-  encryptAndSendMessage(chatId: string, message: string) {
-    this.getSessionCipher(chatId).encrypt(
-      new TextEncoder().encode(message).buffer
-    ).then(
-      cipherText => {
+      ciphertext => {
         console.log('message: ' + message);
-        console.log('encrypted message: ' + cipherText.body);
-        this.chatsService.sendMessage(chatId, cipherText.body);
+
+        console.log('encrypted message: ' + JSON.stringify(ciphertext));
+        this.chatsService.sendMessage(contact.chatId, ciphertext);
       }
-    ).catch(err => console.log(err));
+    );
+  }
+
+  async decryptMessage(ciphertext) {
+    const cipher = new SessionCipher(this.loggedInUserStore, this.recipientAddress);
+
+    console.log('decrypting');
+    let plaintext: ArrayBuffer = new Uint8Array().buffer;
+    if (ciphertext.type === 3) {
+      // It is a PreKeyWhisperMessage and will establish a session.
+      console.log(ciphertext);
+      cipher.decryptPreKeyWhisperMessage(ciphertext.body).then(function (result) {
+        // handle plaintext ArrayBuffer
+        plaintext = result;
+        console.log(plaintext);
+      }).catch(function (error) {
+        // handle identity key conflict
+        console.log('decryptig message failuer');
+        console.log(error);
+      });
+    }
+    else if (ciphertext.type === 1) {
+      // It is a WhisperMessage for an established session.
+      plaintext = await cipher.decryptWhisperMessage(ciphertext.body, "binary");
+    }
+    const message = new TextDecoder().decode(new Uint8Array(plaintext));
+    console.log(JSON.stringify(plaintext));
+    return message;
+    //return message;
   }
 
   arrayBufferToBase64(buffer) {
@@ -233,5 +212,16 @@ export class SignalStoreService {
       bytes[i] = binary_string.charCodeAt(i);
     }
     return bytes.buffer;
+  }
+
+  convertToBase64(data) {
+    data.identityPubKey = this.arrayBufferToBase64(data.identityPubKey);
+    data.signedPreKey.publicKey = this.arrayBufferToBase64(
+      data.signedPreKey.publicKey
+    );
+    data.signedPreKey.signature = this.arrayBufferToBase64(
+      data.signedPreKey.signature
+    );
+    data.preKey.publicKey = this.arrayBufferToBase64(data.preKey.publicKey);
   }
 }

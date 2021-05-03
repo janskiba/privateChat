@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { MessageType } from '@privacyresearch/libsignal-protocol-typescript';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class ChatsService {
   constructor(
     private angularFirestore: AngularFirestore,
     private angularFireAuth: AngularFireAuth
-  ) {}
+  ) { }
 
   async createChat(contactEmail: string, chatId: string) {
     const currentUser = await this.angularFireAuth.currentUser;
@@ -50,7 +51,7 @@ export class ChatsService {
     return ref.doc(`${chatData.chatId}`).set(data);
   }
 
-  async sendMessage(chatId: string, content: string) {
+  async sendMessage(chatId: string, content: MessageType) {
     //add sender to receiver's contact list
     const currentUser = await this.angularFireAuth.currentUser;
     const data = {

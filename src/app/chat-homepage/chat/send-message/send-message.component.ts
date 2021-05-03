@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChatsService } from 'src/app/shared/chats.service';
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
-import { SignalStoreService } from 'src/app/signal/signal-store.service';
+import { SignalService } from 'src/app/signal/signal.service';
 
 @Component({
   selector: 'app-send-message',
@@ -17,7 +17,7 @@ export class SendMessageComponent implements OnInit, OnDestroy {
   constructor(
     private chatsService: ChatsService,
     public manageContactsService: ManageContactsService,
-    private signalStoreService: SignalStoreService
+    private SignalService: SignalService
   ) { }
 
   ngOnInit(): void { }
@@ -26,7 +26,7 @@ export class SendMessageComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm, contact) {
     const message = form.value.message;
-    this.signalStoreService.encryptAndSendMessage(contact.chatId, message);
+    this.SignalService.encryptAndSendMessage(contact, message);
     form.reset();
   }
 }
