@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChatsService } from 'src/app/shared/chats.service';
+import { LocalMessagesService } from 'src/app/shared/local-messages.service';
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 import { SignalService } from 'src/app/signal/signal.service';
 
@@ -12,13 +13,13 @@ import { SignalService } from 'src/app/signal/signal.service';
   styleUrls: ['./send-message.component.scss'],
 })
 export class SendMessageComponent implements OnInit, OnDestroy {
-  private messageList = [];
-  updateMessageList = new Subject;
-
+  /*   contactData: any;
+   */
   constructor(
     private chatsService: ChatsService,
     public manageContactsService: ManageContactsService,
-    private SignalService: SignalService
+    private SignalService: SignalService,
+    private localMessagesService: LocalMessagesService
   ) { }
 
   ngOnInit(): void { }
@@ -28,10 +29,10 @@ export class SendMessageComponent implements OnInit, OnDestroy {
   onSubmit(form: NgForm, contact) {
     const message = form.value.message;
 
-    //emit not encrypted message
-    this.messageList.push(message);
-    this.updateMessageList.next(this.messageList);
+    //update local(sender UI)
+    this.localMessagesService.addMessage(message);
 
+    //encrypt message and save ot firebase
     this.SignalService.encryptAndSendMessage(contact, message);
     form.reset();
   }

@@ -3,17 +3,16 @@
     *ngIf="chatsService.currentChat$ | async as currentChat"
     class="message-list"
   >
-    <div
-      class="message-container"
-      *ngFor="let message of currentChat.messages"
-      [ngClass]="{ sender: user.email == message.sender }"
-    >
-      <p class="message" *ngIf="user.email == message.sender">
-        {{ message.content.body }}
+    <div class="message-container sender" *ngFor="let message of localMessages">
+      <p class="message">
+        {{ message }}
       </p>
+    </div>
 
+    <div class="message-container" *ngFor="let message of currentChat.messages">
       <p class="message" *ngIf="user.email != message.sender">
-        {{ SignalService.decryptMessage(message.content) }}
+        <!-- {{ SignalService.decryptMessage(message.content) }} -->
+        {{ message.content.body }}
       </p>
     </div>
   </div>
