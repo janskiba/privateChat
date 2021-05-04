@@ -1,18 +1,17 @@
 <div class="message-list-container" *ngIf="authService.user$ | async as user">
-  <div
-    *ngIf="chatsService.currentChat$ | async as currentChat"
-    class="message-list"
-  >
+  <div class="message-list">
     <div class="message-container sender" *ngFor="let message of localMessages">
       <p class="message">
         {{ message }}
       </p>
     </div>
 
-    <div class="message-container" *ngFor="let message of currentChat.messages">
-      <p class="message" *ngIf="user.email != message.sender">
-        {{ SignalService.decryptMessage(message.content) }}
-        <!-- {{ message.content.body }} -->
+    <div
+      class="message-container sender"
+      *ngFor="let message of decryptedMessages"
+    >
+      <p class="message">
+        {{ message.content.body }}
       </p>
     </div>
   </div>

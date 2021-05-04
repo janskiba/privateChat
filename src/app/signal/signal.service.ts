@@ -17,8 +17,9 @@ import {
 } from '@privacyresearch/libsignal-protocol-typescript';
 
 import { ChatsService } from '../shared/chats.service';
-import { User } from '../shared/user.model';
 import { StoreService } from './store.service';
+import { Message } from "../shared/models/message.model";
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,9 @@ export class SignalService {
   constactPreKeyBundle = {};
 
   recipientAddress: SignalProtocolAddress;
+
+  decryptedMessages: Message[] = [];
+  updatedecryptedMessages = new Subject<Message[]>();
 
   constructor(
     private angularfirestore: AngularFirestore,
@@ -168,7 +172,7 @@ export class SignalService {
     );
   }
 
-  async decryptMessage(ciphertext) {
+  async decryptMessage(ciphertext: Message) {
     //debugger;
     console.log('decrypting');
 
@@ -177,10 +181,22 @@ export class SignalService {
     let plaintext: ArrayBuffer = new Uint8Array().buffer;
 
     // It is a PreKeyWhisperMessage and will establish a session.
-    plaintext = await cipher.decryptPreKeyWhisperMessage(ciphertext.body, "binary");
+    plaintext = await cipher.decryptPreKeyWhisperMessage(ciphertext.content.body, "binary");
     const message = new TextDecoder().decode(new Uint8Array(plaintext));
     console.log(message);
-    return message;
+
+    const decryptedMessage: Message = {
+      content: {
+        body: message,
+        registratonId: ciphertext.content.registratonId,
+        type: ciphertext.content.type,
+      },
+      createdAt: ciphertext.createdAt,
+      sender: ciphertext.sender,
+    };
+
+    this.decryptedMessages.push(decryptedMessage);
+    this.updatedecryptedMessages.next(this.decryptedMessages.slice());
   }
 
   arrayBufferToBase64(buffer) {
