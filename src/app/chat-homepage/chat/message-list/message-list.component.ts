@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
 import { SignalService } from 'src/app/signal/signal.service';
+import { SendMessageComponent } from "../send-message/send-message.component";
 
 @Component({
   selector: 'app-message-list',

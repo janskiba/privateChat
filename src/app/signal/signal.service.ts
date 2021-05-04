@@ -122,9 +122,9 @@ export class SignalService {
             this.constactPreKeyBundle['preKey'].publicKey
           );
           console.log(this.constactPreKeyBundle);
-          //this.startSession(email);
         } else console.log('no such documents');
       });
+    this.recipientAddress = new SignalProtocolAddress(email, 1);
   }
 
   async startSession(email: string) {
@@ -148,7 +148,9 @@ export class SignalService {
 
   async encryptAndSendMessage(contact, message: string) {
 
+    //first build a session
     await this.startSession(contact.email);
+
     const loggedInUserCipher = new SessionCipher(
       this.loggedInUserStore,
       this.recipientAddress
@@ -167,31 +169,18 @@ export class SignalService {
   }
 
   async decryptMessage(ciphertext) {
+    //debugger;
+    console.log('decrypting');
+
     const cipher = new SessionCipher(this.loggedInUserStore, this.recipientAddress);
 
-    console.log('decrypting');
     let plaintext: ArrayBuffer = new Uint8Array().buffer;
-    if (ciphertext.type === 3) {
-      // It is a PreKeyWhisperMessage and will establish a session.
-      console.log(ciphertext);
-      cipher.decryptPreKeyWhisperMessage(ciphertext.body).then(function (result) {
-        // handle plaintext ArrayBuffer
-        plaintext = result;
-        console.log(plaintext);
-      }).catch(function (error) {
-        // handle identity key conflict
-        console.log('decryptig message failuer');
-        console.log(error);
-      });
-    }
-    else if (ciphertext.type === 1) {
-      // It is a WhisperMessage for an established session.
-      plaintext = await cipher.decryptWhisperMessage(ciphertext.body, "binary");
-    }
+
+    // It is a PreKeyWhisperMessage and will establish a session.
+    plaintext = await cipher.decryptPreKeyWhisperMessage(ciphertext.body, "binary");
     const message = new TextDecoder().decode(new Uint8Array(plaintext));
-    console.log(JSON.stringify(plaintext));
+    console.log(message);
     return message;
-    //return message;
   }
 
   arrayBufferToBase64(buffer) {

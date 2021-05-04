@@ -9,7 +9,6 @@
       [ngClass]="{ sender: user.email == message.sender }"
     >
       <p class="message" *ngIf="user.email == message.sender">
-        <!-- {{ SignalService.decryptMessage(message.content) }} -->
         {{ message.content.body }}
       </p>
 
