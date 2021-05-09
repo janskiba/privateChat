@@ -1,14 +1,9 @@
-<div class="message-list-container" *ngIf="authService.user$ | async as user">
+<div class="message-list-container">
   <div class="message-list">
-    <div class="message-container sender" *ngFor="let message of localMessages">
-      <p class="message">
-        {{ message }}
-      </p>
-    </div>
-
     <div
-      class="message-container sender"
-      *ngFor="let message of decryptedMessages"
+      class="message-container"
+      *ngFor="let message of messages"
+      [ngClass]="{ sender: currentUser.email == message.sender }"
     >
       <p class="message">
         {{ message.content.body }}

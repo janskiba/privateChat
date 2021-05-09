@@ -14,9 +14,8 @@ import { Message } from "../../../shared/models/message.model";
   styleUrls: ['./message-list.component.scss'],
 })
 export class MessageListComponent implements OnInit, OnDestroy {
-  localMessages: string[];
   localMessagesSubscription: Subscription;
-  decryptedMessages: Message[] = [];
+  messages = [];
 
   currentUser: User;
 
@@ -33,8 +32,8 @@ export class MessageListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getCurrentUser();
 
-    this.localMessagesSubscription = this.localMessagesService.updateMessageList.subscribe((result: string[]) => {
-      this.localMessages = result;
+    this.localMessagesSubscription = this.localMessagesService.newMessage.subscribe((result) => {
+      this.messages.push(result);
     });
 
 
@@ -51,8 +50,8 @@ export class MessageListComponent implements OnInit, OnDestroy {
       console.log(error);
     });
 
-    this.signalService.updatedecryptedMessages.subscribe(result => {
-      this.decryptedMessages = result;
+    this.signalService.newMessage.subscribe(result => {
+      this.messages.push(result);
     });
   }
 
@@ -67,12 +66,10 @@ export class MessageListComponent implements OnInit, OnDestroy {
 
   async decryptMessage(message: Message) {
     //cheks if message is already decrypted
-    const exists = this.decryptedMessages.some((_message: Message) => message.createdAt === _message.createdAt);
+    const exists = this.messages.some((_message: Message) => message.createdAt === _message.createdAt);
 
     if (!exists) {
       await this.signalService.decryptMessage(message);
     }
-
-    //console.log(this.decryptedMessage);
   }
 }

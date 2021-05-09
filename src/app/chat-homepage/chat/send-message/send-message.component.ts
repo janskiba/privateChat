@@ -15,8 +15,7 @@ import { SignalService } from 'src/app/signal/signal.service';
   styleUrls: ['./send-message.component.scss'],
 })
 export class SendMessageComponent implements OnInit, OnDestroy {
-  /*   contactData: any;
-   */
+
   constructor(
     private chatsService: ChatsService,
     public manageContactsService: ManageContactsService,
@@ -32,7 +31,7 @@ export class SendMessageComponent implements OnInit, OnDestroy {
     const message = form.value.message;
 
     //update local(sender UI)
-    this.localMessagesService.addMessage(message);
+    this.localMessagesService.addMessage(contact, message);
 
     //encrypt message and save ot firebase
     this.SignalService.encryptAndSendMessage(contact, message);

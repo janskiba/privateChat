@@ -1,9 +1,9 @@
 export interface Message {
   content: {
     body: string;
-    registratonId: number;
-    type: number;
+    registratonId?: number;
+    type?: number;
   };
-  createdAt: number;
+  createdAt?: number;
   sender: string;
 }

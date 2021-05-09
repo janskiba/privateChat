@@ -16,7 +16,7 @@ export class ChatsService {
 
   constructor(
     private angularFirestore: AngularFirestore,
-    private angularFireAuth: AngularFireAuth
+    private angularFireAuth: AngularFireAuth,
   ) { }
 
   async createChat(contactEmail: string, chatId: string) {
@@ -60,6 +60,7 @@ export class ChatsService {
       createdAt: Date.now(),
     };
     if (currentUser) {
+
       const ref = this.angularFirestore.collection('chats').doc(chatId);
       //uses the Firestore arrayUnion method to append a new chat message to document
       return ref.update({

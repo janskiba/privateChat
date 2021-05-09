@@ -1,23 +1,33 @@
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalMessagesService {
-  messageList: string[] = [];
-  updateMessageList = new Subject;
+  newMessage = new Subject;
 
-  constructor() { }
+  constructor(private angularFireAuth: AngularFireAuth) {
 
-  addMessage(message: string) {
-    this.messageList.push(message);
-    this.updateMessageList.next(this.messageList.slice());
-    console.log(this.messageList);
+  }
+  async getCurrentUser() {
+    const currentUser = await this.angularFireAuth.currentUser;
+    return currentUser.email;
   }
 
-  resetMessageList() {
-    this.messageList = [];
-    this.updateMessageList.next(this.messageList.slice());
+  async addMessage(contact, message: Message) {
+    const currentUser = await this.angularFireAuth.currentUser;
+    const messageData = {
+      content: {
+        body: message,
+      },
+      sender: currentUser.email,
+    };
+
+    console.log(messageData);
+
+    this.newMessage.next(messageData);
   }
 }

@@ -26,6 +26,6 @@ export class ContactComponent implements OnInit {
     this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
 
     //reset local array of so that user messages do not get mixed up
-    this.localMessagesService.resetMessageList();
+    //this.localMessagesService.resetMessageList();
   }
 }

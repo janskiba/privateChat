@@ -20,6 +20,7 @@ import { ChatsService } from '../shared/chats.service';
 import { StoreService } from './store.service';
 import { Message } from "../shared/models/message.model";
 import { Subject } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -31,8 +32,9 @@ export class SignalService {
 
   recipientAddress: SignalProtocolAddress;
 
-  decryptedMessages: Message[] = [];
-  updatedecryptedMessages = new Subject<Message[]>();
+  //build a session only on first message
+  firstMessage: boolean = true;
+  newMessage = new Subject<Message>();
 
   constructor(
     private angularfirestore: AngularFirestore,
@@ -152,8 +154,11 @@ export class SignalService {
 
   async encryptAndSendMessage(contact, message: string) {
 
-    //first build a session
-    await this.startSession(contact.email);
+    if (this.firstMessage) //first build a session
+      await this.startSession(contact.email);
+
+    //build a session only on first message
+    this.firstMessage = false;
 
     const loggedInUserCipher = new SessionCipher(
       this.loggedInUserStore,
@@ -180,14 +185,22 @@ export class SignalService {
 
     let plaintext: ArrayBuffer = new Uint8Array().buffer;
 
-    // It is a PreKeyWhisperMessage and will establish a session.
-    plaintext = await cipher.decryptPreKeyWhisperMessage(ciphertext.content.body, "binary");
-    const message = new TextDecoder().decode(new Uint8Array(plaintext));
-    console.log(message);
+    if (ciphertext.content.type === 3) {
+      // It is a PreKeyWhisperMessage and will establish a session.
+      plaintext = await cipher.decryptPreKeyWhisperMessage(ciphertext.content.body, "binary");
+    }
+
+    else if (ciphertext.content.type === 1) {
+      // It is a PreKeyWhisperMessage and will establish a session.
+      plaintext = await cipher.decryptWhisperMessage(ciphertext.content.body, "binary");
+    }
+
+    const decryptedText = new TextDecoder().decode(new Uint8Array(plaintext));
+    console.log(decryptedText);
 
     const decryptedMessage: Message = {
       content: {
-        body: message,
+        body: decryptedText,
         registratonId: ciphertext.content.registratonId,
         type: ciphertext.content.type,
       },
@@ -195,8 +208,8 @@ export class SignalService {
       sender: ciphertext.sender,
     };
 
-    this.decryptedMessages.push(decryptedMessage);
-    this.updatedecryptedMessages.next(this.decryptedMessages.slice());
+    //this.decryptedMessages.push(decryptedMessage);
+    this.newMessage.next(decryptedMessage);
   }
 
   arrayBufferToBase64(buffer) {
