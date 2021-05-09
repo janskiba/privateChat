@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AuthService } from 'src/app/shared/auth.service';
-import { ChatsService } from 'src/app/shared/chats.service';
-import { LocalMessagesService } from 'src/app/shared/local-messages.service';
+import { Component, Input, OnInit } from '@angular/core';
+
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
+import { Contact } from 'src/app/shared/models/contact.model';
 import { SignalService } from 'src/app/signal/signal.service';
 
 @Component({
@@ -11,21 +10,17 @@ import { SignalService } from 'src/app/signal/signal.service';
   styleUrls: ['./contact.component.scss'],
 })
 export class ContactComponent implements OnInit {
-  @Input() childContact;
+  @Input() childContact: Contact;
 
   constructor(
-    private localMessagesService: LocalMessagesService,
     private manageContactsService: ManageContactsService,
     private SignalService: SignalService
   ) { }
 
   ngOnInit(): void { }
 
-  onContactClick(contact) {
+  onContactClick(contact: Contact) {
     this.manageContactsService.displayClickedContact(contact);
     this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
-
-    //reset local array of so that user messages do not get mixed up
-    //this.localMessagesService.resetMessageList();
   }
 }

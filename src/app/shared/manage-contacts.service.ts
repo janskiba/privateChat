@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+
 import { ChatsService } from './chats.service';
+import { Contact } from './models/contact.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ManageContactsService {
-  clickedContact$: Observable<any>;
+  clickedContact$: Observable<Contact>;
 
   constructor(
     private angularFirestore: AngularFirestore,
     private angularFireAuth: AngularFireAuth,
     private authService: AuthService,
     private chatsService: ChatsService
-  ) {}
+  ) { }
 
-  findContact(contact) {
+  findContact(contact: string) {
     //check if in users collection exist wanted contact
     this.angularFirestore
       .collection('users')
@@ -40,7 +40,7 @@ export class ManageContactsService {
       });
   }
 
-  async updateContactList(contact) {
+  async updateContactList(contact: any) {
     const currentUser = (await this.angularFireAuth.currentUser).email;
 
     const contactsRef = this.angularFirestore
@@ -82,7 +82,7 @@ export class ManageContactsService {
     );
   }
 
-  displayClickedContact(contact) {
+  displayClickedContact(contact: Contact) {
     console.log(contact);
     //convert object into observable
     this.chatsService.getMessagess(contact);

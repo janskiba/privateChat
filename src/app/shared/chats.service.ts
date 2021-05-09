@@ -5,6 +5,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MessageType } from '@privacyresearch/libsignal-protocol-typescript';
+import { Chat } from './models/chat.model';
+import { Contact } from './models/contact.model';
 
 
 @Injectable({
@@ -12,7 +14,7 @@ import { MessageType } from '@privacyresearch/libsignal-protocol-typescript';
 })
 export class ChatsService {
   //get messages of current chatId
-  currentChat$: Observable<any>;
+  currentChat$: Observable<Chat>;
 
   constructor(
     private angularFirestore: AngularFirestore,
@@ -37,7 +39,7 @@ export class ChatsService {
     await this.angularFirestore.collection('chats').doc(`${chatId}`).set(data);
   }
 
-  updateFriendContactList(chatData, contactDisplayname: string) {
+  updateFriendContactList(chatData: Chat, contactDisplayname: string) {
     const data = {
       chatId: chatData.chatId,
       displayName: contactDisplayname,
@@ -69,9 +71,8 @@ export class ChatsService {
     }
   }
 
-  getMessagess(contact) {
-    /*     console.log('get messages activated');
-     */ return (this.currentChat$ = this.angularFirestore
+  getMessagess(contact: Contact) {
+    return (this.currentChat$ = this.angularFirestore
       .collection<any>('chats')
       .doc(contact.chatId)
       .snapshotChanges()

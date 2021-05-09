@@ -1,5 +1,5 @@
 export interface Contact {
   chatId: string;
-  dislayname: string;
+  displayName: string;
   email: string;
 }

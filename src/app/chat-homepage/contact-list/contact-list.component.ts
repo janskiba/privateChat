@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
+import { Contact } from 'src/app/shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-list',
@@ -36,7 +37,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
     //cheks if contact email is on contact list
     //some returns true if does
-    const exists = this.contactList.some((user) => user.email === contact);
+    const exists = this.contactList.some((user: Contact) => user.email === contact);
 
     if (!exists) {
       this.manageContactsService.findContact(contact);

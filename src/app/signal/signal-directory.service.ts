@@ -23,8 +23,8 @@ interface FullDirectoryEntry {
   providedIn: 'root',
 })
 export class SignalDirectoryService {
-  constructor(private angularfirestore: AngularFirestore) {}
-  private _data: { [address: string]: FullDirectoryEntry } = {};
+  constructor(private angularfirestore: AngularFirestore) { }
+  private _data: { [address: string]: FullDirectoryEntry; } = {};
 
   storeKeyBundle(address: string, bundle: FullDirectoryEntry): void {
     this._data[address] = bundle;
@@ -35,35 +35,6 @@ export class SignalDirectoryService {
   }
 
   getPreKeyBundle(address: string): DeviceType | undefined {
-    /* this.angularfirestore
-      .collection('users')
-      .doc(`${address}`)
-      .get()
-      .subscribe(async (result) => {
-        if (result.exists) {
-          this.loggedInUserStore = await result.data()['preKeyBundle'];
-          console.log(this.loggedInUserStore);
-
-          this.loggedInUserStore['identityPubKey'] = this.base64ToArrayBuffer(
-            this.loggedInUserStore['identityPubKey']
-          );
-          this.loggedInUserStore[
-            'signedPreKey'
-          ].publicKey = this.base64ToArrayBuffer(
-            this.loggedInUserStore['signedPreKey'].publicKey
-          );
-          this.loggedInUserStore[
-            'signedPreKey'
-          ].signature = this.base64ToArrayBuffer(
-            this.loggedInUserStore['signedPreKey'].signature
-          );
-          this.loggedInUserStore['preKey'].publicKey = this.base64ToArrayBuffer(
-            this.loggedInUserStore['preKey'].publicKey
-          );
-          console.log(this.loggedInUserStore);
-        } else console.log('no such documents');
-      }); */
-
     console.log(address);
     const bundle = this._data[address];
     console.log(bundle);

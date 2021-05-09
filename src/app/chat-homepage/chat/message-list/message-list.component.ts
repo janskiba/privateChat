@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
@@ -24,7 +23,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public signalService: SignalService,
     private localMessagesService: LocalMessagesService,
-    private angularFireAuth: AngularFireAuth
   ) {
 
   }

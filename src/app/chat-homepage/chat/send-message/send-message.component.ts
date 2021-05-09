@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ChatsService } from 'src/app/shared/chats.service';
+
 import { LocalMessagesService } from 'src/app/shared/local-messages.service';
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
+import { Contact } from 'src/app/shared/models/contact.model';
 import { SignalService } from 'src/app/signal/signal.service';
+
 
 
 
@@ -17,7 +17,6 @@ import { SignalService } from 'src/app/signal/signal.service';
 export class SendMessageComponent implements OnInit, OnDestroy {
 
   constructor(
-    private chatsService: ChatsService,
     public manageContactsService: ManageContactsService,
     private SignalService: SignalService,
     private localMessagesService: LocalMessagesService
@@ -27,7 +26,7 @@ export class SendMessageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { }
 
-  onSubmit(form: NgForm, contact) {
+  onSubmit(form: NgForm, contact: Contact) {
     const message = form.value.message;
 
     //update local(sender UI)

@@ -11,13 +11,14 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, first, map } from 'rxjs/operators';
 import { SignalService } from '../signal/signal.service';
+import { User } from './models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   //user firestore reference
-  user$: Observable<any> = null;
+  user$: Observable<User> = null;
   constructor(
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore,
@@ -27,7 +28,7 @@ export class AuthService {
     console.log('authservice works');
     //listening to the angularfire authState (currently authenticated user) and grabbing related user document with their profail information
     this.user$ = this.angularFireAuth.authState.pipe(
-      switchMap((user) => {
+      switchMap((user: User) => {
         if (user) {
           return this.angularFirestore
             .doc<any>(`users/${user.email}`)
@@ -68,7 +69,7 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         console.log(result.user);
-        //call updateProfile to add userName in data object
+        //call updateProfile to add userName in "data" object
         this.updateProfile(result.user, userName);
         this.router.navigate(['/signin']);
       })
@@ -85,7 +86,7 @@ export class AuthService {
       });
   }
 
-  updateProfile(user, displayName: string) {
+  updateProfile(user: User, displayName: string) {
     const data = {
       uid: user.uid,
       email: user.email,
@@ -95,7 +96,7 @@ export class AuthService {
     this.updateUserData(data);
   }
 
-  private async updateUserData(user) {
+  private async updateUserData(user: User) {
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
       `users/${user.email}`
     );
