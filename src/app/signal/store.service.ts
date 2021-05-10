@@ -78,6 +78,8 @@ export class StoreService {
       throw new Error('Tried to remove value for undefined/null key');
     delete this._store[key];
   }
+
+  //
   put(key: string, value: StoreValue): void {
     if (
       key === undefined ||
@@ -207,6 +209,7 @@ export class StoreService {
     }
     throw new Error(`Identity key has wrong type`);
   }
+
   async storePreKey(
     keyId: number | string,
     keyPair: KeyPairType
@@ -214,7 +217,6 @@ export class StoreService {
     return this.put('25519KeypreKey' + keyId, keyPair);
   }
 
-  // TODO: Why is this keyId a number where others are strings?
   async storeSignedPreKey(
     keyId: number | string,
     keyPair: KeyPairType

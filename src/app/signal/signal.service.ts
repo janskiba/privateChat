@@ -1,8 +1,8 @@
-import { Injectable, ɵCodegenComponentFactoryResolver } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreDocument,
 } from '@angular/fire/firestore';
+import { Subject } from 'rxjs';
 import {
   KeyHelper,
   SignedPublicPreKeyType,
@@ -19,8 +19,7 @@ import {
 import { ChatsService } from '../shared/chats.service';
 import { StoreService } from './store.service';
 import { Message } from "../shared/models/message.model";
-import { Subject } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Contact } from '../shared/models/contact.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +33,8 @@ export class SignalService {
 
   //build a session only on first message
   firstMessage: boolean = true;
+
+  //subject to sobscribe to a new decrypted message in contact-list component
   newMessage = new Subject<Message>();
 
   constructor(
@@ -152,7 +153,7 @@ export class SignalService {
     await sessionBuilder.processPreKey(preKeyBundle!);
   }
 
-  async encryptAndSendMessage(contact, message: string) {
+  async encryptAndSendMessage(contact: Contact, message: string) {
 
     if (this.firstMessage) //first build a session
       await this.startSession(contact.email);
