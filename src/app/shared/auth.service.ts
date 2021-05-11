@@ -114,10 +114,8 @@ export class AuthService {
             displayName: user.displayName,
             photoURL: user.photoURL,
           };
+          await userRef.set(data, { merge: true });
           this.router.navigate(['/user-homepage']);
-
-          return userRef.set(data, { merge: true });
-
           /* const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);
           const data = {
@@ -138,9 +136,9 @@ export class AuthService {
             photoURL: user.photoURL,
             preKeyBundle,
           };
-          this.router.navigate(['/user-homepage']);
 
-          return userRef.set(data, { merge: true });
+          await userRef.set(data, { merge: true });
+          this.router.navigate(['/user-homepage']);
         }
       });
   }
