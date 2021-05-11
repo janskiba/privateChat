@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 import { Contact } from 'src/app/shared/models/contact.model';
+import { AuthService } from "../../shared/auth.service";
 
 @Component({
   selector: 'app-contact-list',
@@ -14,7 +15,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
   contactList = [];
   subsciption: Subscription;
 
-  constructor(private manageContactsService: ManageContactsService) { }
+  constructor(private manageContactsService: ManageContactsService, private AuthService: AuthService) { }
 
   ngOnInit(): void {
     this.getContacts();

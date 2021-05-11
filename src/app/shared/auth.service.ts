@@ -18,7 +18,7 @@ import { User } from './models/user.model';
 })
 export class AuthService {
   //user firestore reference
-  user$: Observable<User> = null;
+  user$: Observable<User>;
   constructor(
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore,
@@ -108,15 +108,17 @@ export class AuthService {
       .subscribe(async (doc) => {
         if (doc.exists) {
           //zakomentowane do testów, póżniej odkomentu i usuc poniższe
-          /* const data = {
+          const data = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
           };
-          return userRef.set(data, { merge: true }); */
+          this.router.navigate(['/user-homepage']);
 
-          const preKeyBundle = await this.SignalService.createId();
+          return userRef.set(data, { merge: true });
+
+          /* const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);
           const data = {
             uid: user.uid,
@@ -125,7 +127,7 @@ export class AuthService {
             photoURL: user.photoURL,
             preKeyBundle,
           };
-          return userRef.set(data, { merge: true });
+          return userRef.set(data, { merge: true }); */
         } else {
           const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);
@@ -136,10 +138,10 @@ export class AuthService {
             photoURL: user.photoURL,
             preKeyBundle,
           };
+          this.router.navigate(['/user-homepage']);
+
           return userRef.set(data, { merge: true });
         }
       });
-
-    this.router.navigate(['/user-homepage']);
   }
 }

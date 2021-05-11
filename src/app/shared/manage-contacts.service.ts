@@ -9,6 +9,7 @@ import { Observable, of } from 'rxjs';
 
 import { ChatsService } from './chats.service';
 import { Contact } from './models/contact.model';
+import { User } from './models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -64,20 +65,22 @@ export class ManageContactsService {
   getContacts() {
     return this.authService.user$.pipe(
       switchMap((user) => {
-        return this.angularFirestore
-          .collection('users')
-          .doc(`${user.email}`)
-          .collection('contacts')
-          .snapshotChanges()
-          .pipe(
-            map((actions) => {
-              return actions.map((a) => {
-                const data: Object = a.payload.doc.data();
-                const id = a.payload.doc.id;
-                return { id, ...data };
-              });
-            })
-          );
+        if (user) {
+          return this.angularFirestore
+            .collection('users')
+            .doc(`${user.email}`)
+            .collection('contacts')
+            .snapshotChanges()
+            .pipe(
+              map((actions) => {
+                return actions.map((a) => {
+                  const data: Object = a.payload.doc.data();
+                  const id = a.payload.doc.id;
+                  return { id, ...data };
+                });
+              })
+            );
+        }
       })
     );
   }
