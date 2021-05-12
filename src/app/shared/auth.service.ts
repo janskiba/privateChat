@@ -107,7 +107,6 @@ export class AuthService {
       .get()
       .subscribe(async (doc) => {
         if (doc.exists) {
-          //zakomentowane do testów, póżniej odkomentu i usuc poniższe
           const data = {
             uid: user.uid,
             email: user.email,
@@ -116,16 +115,6 @@ export class AuthService {
           };
           await userRef.set(data, { merge: true });
           this.router.navigate(['/user-homepage']);
-          /* const preKeyBundle = await this.SignalService.createId();
-          console.log(preKeyBundle);
-          const data = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            preKeyBundle,
-          };
-          return userRef.set(data, { merge: true }); */
         } else {
           const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);

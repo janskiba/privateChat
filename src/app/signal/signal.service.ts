@@ -26,9 +26,7 @@ import { Contact } from '../shared/models/contact.model';
 })
 export class SignalService {
   loggedInUserStore = new StoreService();
-  contactStore = new StoreService();
   constactPreKeyBundle = {};
-
   recipientAddress: SignalProtocolAddress;
 
   //build a session only on first message
