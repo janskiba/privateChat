@@ -7,6 +7,7 @@ import {
   PreKeyPairType,
   SignedPreKeyPairType,
 } from '@privacyresearch/libsignal-protocol-typescript';
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
 // Type guards
 export function isKeyPairType(kp: any): kp is KeyPairType {
@@ -92,6 +93,47 @@ export class StoreService {
     console.log(this._store);
   }
 
+  async storePreKeyBundle(_store: {}) {
+    /* const db = await openDB('signal', 1, {
+      upgrade(db) {
+        // Create a store of objects
+        const store = db.createObjectStore('preKeyBundle', {
+          keyPath: 'id',
+          // If it isn't explicitly set, create a value by auto incrementing.
+          autoIncrement: true,
+        });
+        // Create an index on the 'date' property of the objects.
+
+        store.createIndex('key', 'value');
+      },
+    });
+
+    // Add an article:
+    await db.put('preKeyBundle',
+      { id: '1232' }
+    ); */
+
+    const db = await openDB('signal', 1, {
+      upgrade(db) {
+        // Create a store of objects
+        const store = db.createObjectStore('preKeyBundle', {
+          // The 'id' property of the object will be the key.
+          keyPath: 'id',
+          // If it isn't explicitly set, create a value by auto incrementing.
+          autoIncrement: true,
+        });
+        // Create an index on the 'date' property of the objects.
+        //store.createIndex('date', 'date');
+      },
+    });
+
+    // Add an article:
+    await db.put('preKeyBundle', {
+      _store
+    });
+
+  }
+
   async getIdentityKeyPair(): Promise<KeyPairType | undefined> {
     const kp = this.get('identityKey', undefined);
     console.log(kp);
@@ -108,6 +150,7 @@ export class StoreService {
     }
     throw new Error('Stored Registration ID is not a number');
   }
+
   isTrustedIdentity(
     identifier: string,
     identityKey: ArrayBuffer,
@@ -221,7 +264,8 @@ export class StoreService {
     keyId: number | string,
     keyPair: KeyPairType
   ): Promise<void> {
-    return this.put('25519KeysignedKey' + keyId, keyPair);
+    this._store['25519KeysignedKey' + keyId] = keyPair;
+    this.storePreKeyBundle(this._store);
   }
   async removeSignedPreKey(keyId: number | string): Promise<void> {
     return this.remove('25519KeysignedKey' + keyId);
