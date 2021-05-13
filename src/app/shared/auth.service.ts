@@ -19,6 +19,10 @@ import { User } from './models/user.model';
 export class AuthService {
   //user firestore reference
   user$: Observable<User>;
+
+  //informs if prekey bundle needs to be stored to indexedDb or read from indexedDb
+  isSignedIn = false;
+
   constructor(
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore,
@@ -100,7 +104,6 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
       `users/${user.email}`
     );
-
     this.angularFirestore
       .collection('users')
       .doc(`${user.email}`)
@@ -116,6 +119,7 @@ export class AuthService {
           await userRef.set(data, { merge: true });
           this.router.navigate(['/user-homepage']);
         } else {
+          this.isSignedIn = true;
           const preKeyBundle = await this.SignalService.createId();
           console.log(preKeyBundle);
           const data = {

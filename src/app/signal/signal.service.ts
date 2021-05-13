@@ -20,6 +20,7 @@ import { ChatsService } from '../shared/chats.service';
 import { StoreService } from './store.service';
 import { Message } from "../shared/models/message.model";
 import { Contact } from '../shared/models/contact.model';
+import { AuthService } from '../shared/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,13 +33,16 @@ export class SignalService {
   //build a session only on first message
   firstMessage: boolean = true;
 
-  //subject to sobscribe to a new decrypted message in contact-list component
+  //subject to subscribe to a new decrypted message in contact-list component
   newMessage = new Subject<Message>();
 
   constructor(
     private angularfirestore: AngularFirestore,
-    private chatsService: ChatsService
-  ) { }
+    private chatsService: ChatsService,
+    private storeService: StoreService,
+  ) {
+    this.loggedInUserStore = storeService;
+  }
 
   async createId() {
     //generate registrationId and IdentityKeyPair
@@ -104,7 +108,6 @@ export class SignalService {
       .subscribe(async (result) => {
         if (result.exists) {
           this.constactPreKeyBundle = await result.data()['preKeyBundle'];
-          console.log(this.loggedInUserStore);
 
           this.constactPreKeyBundle[
             'identityPubKey'
@@ -177,7 +180,7 @@ export class SignalService {
   }
 
   async decryptMessage(ciphertext: Message) {
-    //debugger;
+    //;
     console.log('decrypting');
 
     const cipher = new SessionCipher(this.loggedInUserStore, this.recipientAddress);

@@ -7,8 +7,8 @@ import {
   PreKeyPairType,
   SignedPreKeyPairType,
 } from '@privacyresearch/libsignal-protocol-typescript';
-import { SignalLocalStorageDbService } from './signal-local-storage-db.service';
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
+import { openDB, deleteDB, wrap, unwrap, IDBPDatabase } from 'idb';
+import { AuthService } from '../shared/auth.service';
 
 // Type guards
 export function isKeyPairType(kp: any): kp is KeyPairType {
@@ -60,10 +60,33 @@ type StoreValue =
   providedIn: 'root',
 })
 export class StoreService {
-  private _store: Record<string, StoreValue>;
+  public _store: Record<string, StoreValue>;
 
   constructor() {
-    this._store = {};
+    this.getValueFromAStore();
+  }
+
+  async getValueFromAStore() {
+
+
+    const db = await openDB('signal', 1);
+    if (db.objectStoreNames.contains('preKeyBundle')) {
+      const store = db.transaction('preKeyBundle').objectStore('preKeyBundle');
+      const value = await store.get(1);
+      this._store = value._store;
+      console.log(value);
+    } else {
+      this._store = {};
+      console.log('empty store');
+      db.close();
+      await deleteDB('signal', {
+        blocked() {
+          //
+          console.log('blocked');
+        },
+      });
+
+    }
   }
   //
   get(key: string, defaultValue: StoreValue): StoreValue {
@@ -96,7 +119,10 @@ export class StoreService {
 
   async storePreKeyBundle(_store: {}) {
     const db = await openDB('signal', 1, {
+
       upgrade(db) {
+        //debugger;
+
         // Create a store of objects
         const store = db.createObjectStore('preKeyBundle', {
           // The 'id' property of the object will be the key.
@@ -104,13 +130,11 @@ export class StoreService {
           // If it isn't explicitly set, create a value by auto incrementing.
           autoIncrement: true,
         });
-        // Create an index on the 'date' property of the objects.
-        store.createIndex('date', 'date');
       },
     });
 
-    // Add an article:
-    await db.add('data', {
+    // Add preKeyBundle:
+    await db.put('preKeyBundle', {
       _store
     });
 
@@ -136,10 +160,9 @@ export class StoreService {
   isTrustedIdentity(
     identifier: string,
     identityKey: ArrayBuffer,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _direction: Direction
   ): Promise<boolean> {
-    // debugger;
+    // ;
     if (identifier === null || identifier === undefined) {
       throw new Error('tried to check identity key for undefined/null key');
     }
