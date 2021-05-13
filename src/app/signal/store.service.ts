@@ -94,25 +94,6 @@ export class StoreService {
   }
 
   async storePreKeyBundle(_store: {}) {
-    /* const db = await openDB('signal', 1, {
-      upgrade(db) {
-        // Create a store of objects
-        const store = db.createObjectStore('preKeyBundle', {
-          keyPath: 'id',
-          // If it isn't explicitly set, create a value by auto incrementing.
-          autoIncrement: true,
-        });
-        // Create an index on the 'date' property of the objects.
-
-        store.createIndex('key', 'value');
-      },
-    });
-
-    // Add an article:
-    await db.put('preKeyBundle',
-      { id: '1232' }
-    ); */
-
     const db = await openDB('signal', 1, {
       upgrade(db) {
         // Create a store of objects
@@ -122,12 +103,10 @@ export class StoreService {
           // If it isn't explicitly set, create a value by auto incrementing.
           autoIncrement: true,
         });
-        // Create an index on the 'date' property of the objects.
-        //store.createIndex('date', 'date');
       },
     });
 
-    // Add an article:
+    // Add preKeyBundle:
     await db.put('preKeyBundle', {
       _store
     });
