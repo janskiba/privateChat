@@ -7,6 +7,7 @@ import {
   PreKeyPairType,
   SignedPreKeyPairType,
 } from '@privacyresearch/libsignal-protocol-typescript';
+import { SignalLocalStorageDbService } from './signal-local-storage-db.service';
 import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
 // Type guards
@@ -103,11 +104,13 @@ export class StoreService {
           // If it isn't explicitly set, create a value by auto incrementing.
           autoIncrement: true,
         });
+        // Create an index on the 'date' property of the objects.
+        store.createIndex('date', 'date');
       },
     });
 
-    // Add preKeyBundle:
-    await db.put('preKeyBundle', {
+    // Add an article:
+    await db.add('data', {
       _store
     });
 
