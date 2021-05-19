@@ -7,8 +7,9 @@ import {
   PreKeyPairType,
   SignedPreKeyPairType,
 } from '@privacyresearch/libsignal-protocol-typescript';
-import { openDB, deleteDB, wrap, unwrap, IDBPDatabase } from 'idb';
-import { AuthService } from '../shared/auth.service';
+
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
+
 
 // Type guards
 export function isKeyPairType(kp: any): kp is KeyPairType {
