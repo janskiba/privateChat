@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { MessageType } from '@privacyresearch/libsignal-protocol-typescript';
 import { Chat } from './models/chat.model';
 import { Contact } from './models/contact.model';
+import { Message } from './models/message.model';
 
 
 @Injectable({
@@ -80,7 +81,17 @@ export class ChatsService {
         map((doc) => {
           //get data of each change
           return { id: doc.payload.id, ...doc.payload.data() };
+
         })
       ));
+  }
+
+  deleteMessage(chatId: string, message: Message) {
+    //remove retrieved messages from firestore
+    this.angularFirestore
+      .collection<any>('chats')
+      .doc(chatId).update({
+        "messages": firebase.firestore.FieldValue.arrayRemove({ "content": message.content, "createdAt": message.createdAt, "sender": message.sender })
+      });
   }
 }

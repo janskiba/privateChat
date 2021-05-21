@@ -37,10 +37,12 @@ export class MessageListComponent implements OnInit, OnDestroy {
 
     this.chatsService.currentChat$.subscribe(result => {
       result.messages.map((message: Message) => {
-        console.log(message);
         //decrypt mesages only if user is a receiver
-        if (this.currentUser.email !== message.sender)
+        if (this.currentUser.email !== message.sender) {
           this.decryptMessage(message);
+          //delete retreived message from firestore
+          this.chatsService.deleteMessage(result.chatId, message);
+        }
       }
 
       );
