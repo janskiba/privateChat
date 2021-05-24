@@ -8,6 +8,7 @@ import { MessageType } from '@privacyresearch/libsignal-protocol-typescript';
 import { Chat } from './models/chat.model';
 import { Contact } from './models/contact.model';
 import { Message } from './models/message.model';
+import { User } from './models/user.model';
 
 
 @Injectable({
@@ -22,8 +23,7 @@ export class ChatsService {
     private angularFireAuth: AngularFireAuth,
   ) { }
 
-  async createChat(contactEmail: string, chatId: string) {
-    const currentUser = await this.angularFireAuth.currentUser;
+  async createChat(contactEmail: string, chatId: string, currentUser: User) {
 
     const data = {
       creator: currentUser.email,
@@ -31,7 +31,7 @@ export class ChatsService {
       chatId: chatId,
       messages: [],
     };
-    console.log(JSON.stringify(data));
+    console.log(JSON.stringify(currentUser));
 
     //add currentUser to friend contactlist
     this.updateFriendContactList(data, currentUser.displayName);
@@ -46,6 +46,7 @@ export class ChatsService {
       displayName: contactDisplayname,
       email: chatData.creator,
     };
+    console.log(data);
     const ref = this.angularFirestore
       .collection('users')
       .doc(`${chatData.contact}`)

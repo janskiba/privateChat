@@ -10,6 +10,8 @@ import { SignalService } from 'src/app/signal/signal.service';
   styleUrls: ['./contact.component.scss'],
 })
 export class ContactComponent implements OnInit {
+
+  //contact's data received from contact list
   @Input() childContact: Contact;
 
   constructor(

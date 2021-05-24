@@ -42,11 +42,12 @@ export class ManageContactsService {
   }
 
   async updateContactList(contact: any) {
-    const currentUser = (await this.angularFireAuth.currentUser).email;
+    const currentUser = await this.authService.getUser();
+    console.log(currentUser);
 
     const contactsRef = this.angularFirestore
       .collection('users')
-      .doc(`${currentUser}`)
+      .doc(`${currentUser.email}`)
       .collection('contacts');
 
     const data = {
@@ -54,12 +55,14 @@ export class ManageContactsService {
       email: contact.email,
     };
 
+    console.log(data);
+
     const ref = await contactsRef.add(data);
 
     //update contact document with a field with its id
     ref.update({ chatId: ref.id });
 
-    return this.chatsService.createChat(contact.email, ref.id);
+    return this.chatsService.createChat(contact.email, ref.id, currentUser);
   }
 
   getContacts() {

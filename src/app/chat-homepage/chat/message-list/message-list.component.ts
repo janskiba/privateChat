@@ -16,6 +16,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
   localMessagesSubscription: Subscription;
   messages = [];
 
+  //user chosen from contact list
   currentUser: User;
 
   constructor(

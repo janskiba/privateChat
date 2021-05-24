@@ -37,7 +37,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
     const contact: string = form.value.email;
 
     //cheks if contact email is on contact list
-    //some returns true if does
+    //method "some()" returns true if does
     const exists = this.contactList.some((user: Contact) => user.email === contact);
 
     if (!exists) {
