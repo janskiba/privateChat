@@ -44,9 +44,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
           //delete retreived message from firestore
           this.chatsService.deleteMessage(result.chatId, message);
         }
-      }
-
-      );
+      });
     }, error => {
       console.log(error);
     });
