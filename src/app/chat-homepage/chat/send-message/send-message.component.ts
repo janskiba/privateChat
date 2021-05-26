@@ -30,7 +30,7 @@ export class SendMessageComponent implements OnInit, OnDestroy {
     const message = form.value.message;
 
     //update local(sender UI)
-    this.localMessagesService.addMessage(contact, message);
+    this.localMessagesService.addCurrentUserMessage(contact.email, message);
 
     //encrypt message and save ot firebase
     this.SignalService.encryptAndSendMessage(contact, message);

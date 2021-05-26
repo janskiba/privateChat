@@ -21,6 +21,7 @@ import { StoreService } from './store.service';
 import { Message } from "../shared/models/message.model";
 import { Contact } from '../shared/models/contact.model';
 import { AuthService } from '../shared/auth.service';
+import { LocalMessagesService } from '../shared/local-messages.service';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,8 @@ export class SignalService {
     private angularfirestore: AngularFirestore,
     private chatsService: ChatsService,
     private storeService: StoreService,
+    private localMessagesSerive: LocalMessagesService,
+
   ) {
     this.loggedInUserStore = storeService;
   }
@@ -211,7 +214,8 @@ export class SignalService {
     };
 
     //this.decryptedMessages.push(decryptedMessage);
-    this.newMessage.next(decryptedMessage);
+    //this.newMessage.next(decryptedMessage);
+    this.localMessagesSerive.addContactMessage(ciphertext.sender, decryptedText);
   }
 
   arrayBufferToBase64(buffer) {

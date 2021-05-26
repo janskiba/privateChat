@@ -33,8 +33,8 @@ export class LocalMessagesService {
     });
   }
 
-  async addMessage(contact: Contact, message: Message) {
-    console.log(contact);
+  //save message sent by loggedIn user
+  async addCurrentUserMessage(contactEmail: string, message: string) {
     const currentUser = await this.authService.getUser();
     const messageData = {
       content: {
@@ -46,7 +46,23 @@ export class LocalMessagesService {
     console.log(messageData);
 
     //save message to localStorage
-    this.storeMessage(contact.email, messageData);
+    this.storeMessage(contactEmail, messageData);
+
+    //inform other components about new message
+    this.newMessage.next(messageData);
+  }
+
+  //save message sent by contact
+  addContactMessage(contactEmail: string, message: string) {
+    const messageData = {
+      content: {
+        body: message,
+      },
+      sender: contactEmail,
+    };
+
+    //save message to localStorage
+    this.storeMessage(contactEmail, messageData);
 
     //inform other components about new message
     this.newMessage.next(messageData);

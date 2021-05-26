@@ -64,7 +64,6 @@ export class ChatsService {
       createdAt: Date.now(),
     };
     if (currentUser) {
-
       const ref = this.angularFirestore.collection('chats').doc(chatId);
       //uses the Firestore arrayUnion method to append a new chat message to document
       return ref.update({
