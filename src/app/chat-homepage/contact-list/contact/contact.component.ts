@@ -26,8 +26,5 @@ export class ContactComponent implements OnInit {
   onContactClick(contact: Contact) {
     this.manageContactsService.displayClickedContact(contact);
     this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
-
-    //create new object in local storage or load local messages
-    this.localMessagesService.createNewObject(contact.email);
   }
 }

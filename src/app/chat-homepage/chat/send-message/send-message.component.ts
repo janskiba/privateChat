@@ -29,10 +29,10 @@ export class SendMessageComponent implements OnInit, OnDestroy {
   onSubmit(form: NgForm, contact: Contact) {
     const message = form.value.message;
 
-    //update local(sender UI)
+    //store message in localStorage
     this.localMessagesService.addCurrentUserMessage(contact.email, message);
 
-    //encrypt message and save ot firebase
+    //encrypt message and save it firebase
     this.SignalService.encryptAndSendMessage(contact, message);
     form.reset();
   }

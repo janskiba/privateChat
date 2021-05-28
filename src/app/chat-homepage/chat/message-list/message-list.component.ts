@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
 import { LocalMessagesService } from 'src/app/shared/local-messages.service';
+import { Contact } from 'src/app/shared/models/contact.model';
 import { User } from 'src/app/shared/models/user.model';
 import { SignalService } from 'src/app/signal/signal.service';
 import { Message } from "../../../shared/models/message.model";
@@ -16,8 +17,11 @@ export class MessageListComponent implements OnInit, OnDestroy {
   localMessagesSubscription: Subscription;
   messages = [];
 
-  //user chosen from contact list
+  //currently logged in user
   currentUser: User;
+
+  //contact info
+  @Input() contact: Contact;
 
   constructor(
     public chatsService: ChatsService,
@@ -28,13 +32,13 @@ export class MessageListComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.getCurrentUser();
 
-    this.localMessagesSubscription = this.localMessagesService.newMessage.subscribe((result) => {
-      this.messages.push(result);
-    });
-
+    //listen to new messages
+    this.loadLocalMessages();
+    //create new object in local storage or load local messages
+    this.localMessagesService.createNewObject(this.contact.email);
 
     this.chatsService.currentChat$.subscribe(result => {
       result.messages.map((message: Message) => {
@@ -70,5 +74,12 @@ export class MessageListComponent implements OnInit, OnDestroy {
     if (!exists) {
       await this.signalService.decryptMessage(message);
     }
+  }
+
+  loadLocalMessages() {
+    this.localMessagesSubscription = this.localMessagesService.newMessage.subscribe((result) => {
+      console.log("loaded message: " + JSON.stringify(result));
+      this.messages.push(result);
+    }, err => { console.log(err); });
   }
 }

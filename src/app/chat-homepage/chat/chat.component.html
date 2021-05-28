@@ -5,8 +5,11 @@
       aby zacząć konwersację
     </p>
   </div>
-  <div class="chat-content" *ngIf="manageContactsService.clickedContact$">
-    <app-message-list></app-message-list>
+  <div
+    class="chat-content"
+    *ngIf="manageContactsService.clickedContact$ | async as clickedContact"
+  >
+    <app-message-list [contact]="clickedContact"></app-message-list>
     <app-send-message></app-send-message>
   </div>
 </div>

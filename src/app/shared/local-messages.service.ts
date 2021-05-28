@@ -1,5 +1,7 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Injectable } from '@angular/core';
+import { AsyncSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Contact } from './models/contact.model';
@@ -16,10 +18,10 @@ export class LocalMessagesService {
 
   //creates new obnject in local storage to store a conversasion
   //works when user user clicks on contact and this object doesn't exists
-  createNewObject(contactEmail: string) {
+  async createNewObject(contactEmail: string) {
     const localStorageList = localStorage.getItem(`${contactEmail}`);
     if (!localStorageList) {
-      localStorage.setItem(`${contactEmail}`, '[]');
+      localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
     } else { //load already stored messages from localStorage
       this.localStorageMessageList = JSON.parse(localStorageList);
       this.loadLocalMessages(this.localStorageMessageList);
@@ -27,6 +29,7 @@ export class LocalMessagesService {
   }
 
   loadLocalMessages(messageList: object[] = []) {
+    console.log("createNewObject actvated");
     messageList.forEach(message => {
       this.newMessage.next(message);
       console.log(message);
