@@ -1,9 +1,9 @@
-<div class="message-list-container">
+<div *ngIf="authService.user$ | async as user" class="message-list-container">
   <div class="message-list">
     <div
       class="message-container"
       *ngFor="let message of messages"
-      [ngClass]="{ sender: currentUser.email == message.sender }"
+      [ngClass]="{ sender: user.email == message.sender }"
     >
       <p class="message">
         {{ message.content.body }}

@@ -1,10 +1,13 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AsyncSubject } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Contact } from './models/contact.model';
+import { User } from './models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +16,16 @@ export class LocalMessagesService {
   newMessage = new Subject;
   localStorageMessageList: object[] = [];
 
-  constructor(private authService: AuthService) {
+  constructor(private angularFireAuth: AngularFireAuth) {
+  }
+
+  getLoggedInUser() {
+    return this.angularFireAuth.authState.pipe(first()).toPromise();
   }
 
   //creates new obnject in local storage to store a conversasion
   //works when user user clicks on contact and this object doesn't exists
-  async createNewObject(contactEmail: string) {
+  async createNewObject(contactEmail: string, currentUser: User) {
     const localStorageList = localStorage.getItem(`${contactEmail}`);
     if (!localStorageList) {
       localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
@@ -38,16 +45,14 @@ export class LocalMessagesService {
 
   //save message sent by loggedIn user
   async addCurrentUserMessage(contactEmail: string, message: string) {
-    const currentUser = await this.authService.getUser();
+    const user = await this.getLoggedInUser();
+
     const messageData = {
       content: {
         body: message,
       },
-      sender: currentUser.email,
+      sender: user.email,
     };
-
-    console.log(messageData);
-
     //save message to localStorage
     this.storeMessage(contactEmail, messageData);
 

@@ -46,7 +46,11 @@ export class AuthService {
 
   getUser() {
     //converts user observable to a promise so we can later use it with async await
-    return this.user$.pipe(first()).toPromise();
+    if (this.user$)
+      return this.user$.pipe(first()).toPromise();
+    else {
+      console.log('wtf');
+    }
   }
 
   signInWithGoogle() {
