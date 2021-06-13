@@ -2,16 +2,12 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
 } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 import { ChatsService } from './chats.service';
 import { Contact } from './models/contact.model';
-import { User } from './models/user.model';
-import { LocalMessagesService } from './local-messages.service';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -20,10 +16,8 @@ export class ManageContactsService {
 
   constructor(
     private angularFirestore: AngularFirestore,
-    private angularFireAuth: AngularFireAuth,
     private authService: AuthService,
     private chatsService: ChatsService,
-    private localMessagesService: LocalMessagesService
   ) { }
 
   findContact(contact: string) {
@@ -94,7 +88,6 @@ export class ManageContactsService {
     console.log(contact);
     //convert object into observable
     this.chatsService.getMessagess(contact);
-    //this.localMessagesService.createNewObject(contact.email);
 
     const obs = of(contact);
     return (this.clickedContact$ = obs);

@@ -49,7 +49,7 @@ export class AuthService {
     if (this.user$)
       return this.user$.pipe(first()).toPromise();
     else {
-      console.log('wtf');
+      console.log('getUser() failed');
     }
   }
 
@@ -82,7 +82,7 @@ export class AuthService {
         this.router.navigate(['/signin']);
       })
       .catch((error) => {
-        console.log(error);
+        alert(error.message);
       });
   }
 
@@ -91,7 +91,7 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         this.router.navigate(['/user-homepage']);
-      });
+      }).catch(error => alert(error.message));
   }
 
   updateProfile(user: User, displayName: string) {

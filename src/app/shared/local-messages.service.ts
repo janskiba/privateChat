@@ -25,7 +25,7 @@ export class LocalMessagesService {
 
   //creates new obnject in local storage to store a conversasion
   //works when user user clicks on contact and this object doesn't exists
-  async createNewObject(contactEmail: string, currentUser: User) {
+  async createNewObject(contactEmail: string) {
     const localStorageList = localStorage.getItem(`${contactEmail}`);
     if (!localStorageList) {
       localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
