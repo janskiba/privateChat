@@ -196,7 +196,6 @@ export class SignalService {
     }
 
     else if (ciphertext.content.type === 1) {
-      // It is a PreKeyWhisperMessage and will establish a session.
       plaintext = await cipher.decryptWhisperMessage(ciphertext.content.body, "binary");
     }
 

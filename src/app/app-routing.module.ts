@@ -7,6 +7,7 @@ import { SigninEmailPasswordComponent } from './auth/signin-email-password/signi
 import { ChooseSiginMethodComponent } from './auth/choose-sigin-method/choose-sigin-method.component';
 import { CreateAccountComponent } from './auth/create-account/create-account.component';
 import { ChatHomepageComponent } from './chat-homepage/chat-homepage.component';
+import { AuthGuardService } from "./shared/auth-guard.service";
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
   {
     path: 'user-homepage',
     component: ChatHomepageComponent,
+    canActivate: [AuthGuardService]
   },
 ];
 

@@ -68,8 +68,6 @@ export class StoreService {
   }
 
   async getValueFromAStore() {
-
-
     const db = await openDB('signal', 1);
     if (db.objectStoreNames.contains('preKeyBundle')) {
       const store = db.transaction('preKeyBundle').objectStore('preKeyBundle');
