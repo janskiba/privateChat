@@ -1,7 +1,7 @@
 @import "../../../../variables";
 
 .message-list-container {
-  height: 720px;
+  height: calc(100% - 80px);
   position: relative;
 
   .message-list {
@@ -23,7 +23,6 @@
         background-color: $gray-medium;
         border-radius: $border-radius;
       }
-
     }
 
     .sender {

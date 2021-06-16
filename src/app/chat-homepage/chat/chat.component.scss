@@ -2,6 +2,10 @@
 .chat-container {
   position: relative;
   height: 100%;
+
+  .chat-content {
+    height: 100%;
+  }
   .find-contactsInfo {
     height: 100%;
     display: flex;
