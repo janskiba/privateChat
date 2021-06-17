@@ -2,6 +2,7 @@
   <div
     *ngIf="authService.user$ | async as user"
     class="header-column header-left"
+    [ngClass]="{ hide: isActive }"
   >
     <div class="user-info">
       <mat-icon class="material-icons-outlined md-40">face</mat-icon>
@@ -12,7 +13,7 @@
       <mat-icon class="material-icons md-30">logout</mat-icon>
     </button>
   </div>
-  <div class="header-column header-right">
+  <div class="header-column header-right" [ngClass]="{ active: isActive }">
     <div
       class="contact-info"
       *ngIf="manageContactsService.clickedContact$ | async as contact"

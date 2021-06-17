@@ -51,9 +51,18 @@
       max-width: none;
       border-right: none;
     }
+    .hide {
+      display: none;
+    }
 
     .header-right {
       display: none;
+    }
+
+    .active {
+      display: flex;
+      max-width: unset;
+      width: 100vw;
     }
   }
 }
