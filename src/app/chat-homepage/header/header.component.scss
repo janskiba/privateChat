@@ -37,6 +37,11 @@
       align-items: center;
       width: 100%;
       padding-right: 80px;
+
+      button {
+        display: none;
+      }
+
       p {
         margin: 3px 0 0 15px;
       }
@@ -63,6 +68,16 @@
       display: flex;
       max-width: unset;
       width: 100vw;
+      .contact-info {
+        button {
+          position: absolute;
+          display: block;
+          left: 10%;
+          mat-icon {
+            font-size: 30px;
+          }
+        }
+      }
     }
   }
 }

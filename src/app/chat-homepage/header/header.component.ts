@@ -22,4 +22,9 @@ export class HeaderComponent implements OnInit {
       this.isActive = value;
     });
   }
+
+  changeEventEmitter() {
+    this.manageContactsService.activatedEmitter.emit(false);
+  }
+
 }
