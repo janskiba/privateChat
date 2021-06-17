@@ -2,8 +2,12 @@
   <div class="app-container">
     <app-header></app-header>
     <div class="components-container">
-      <app-contact-list></app-contact-list>
-      <app-chat></app-chat>
+      <div class="contact-list" [ngClass]="{ hide: isActive }">
+        <app-contact-list></app-contact-list>
+      </div>
+      <div class="app-chat" [ngClass]="{ active: isActive }">
+        <app-chat></app-chat>
+      </div>
     </div>
   </div>
 </div>

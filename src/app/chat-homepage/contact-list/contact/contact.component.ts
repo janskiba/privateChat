@@ -23,8 +23,14 @@ export class ContactComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  //inform about a need to change ngClass on small devices
+  showMessages() {
+    this.manageContactsService.activatedEmitter.emit(true);
+  }
+
   onContactClick(contact: Contact) {
     this.manageContactsService.displayClickedContact(contact);
     this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
+    this.showMessages();
   }
 }

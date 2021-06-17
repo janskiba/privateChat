@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import {
   AngularFirestore,
 } from '@angular/fire/firestore';
@@ -13,6 +13,9 @@ import { Contact } from './models/contact.model';
 })
 export class ManageContactsService {
   clickedContact$: Observable<Contact>;
+
+  //inform about a need to change ngClass on small devices
+  activatedEmitter = new EventEmitter<boolean>();
 
   constructor(
     private angularFirestore: AngularFirestore,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
+import { ManageContactsService } from '../shared/manage-contacts.service';
 import { SignalService } from '../signal/signal.service';
 
 @Component({
@@ -8,7 +9,15 @@ import { SignalService } from '../signal/signal.service';
   styleUrls: ['./chat-homepage.component.scss'],
 })
 export class ChatHomepageComponent implements OnInit {
-  constructor(private signalService: SignalService, private authService: AuthService) {
+  //handle ngClass on mobile devices, if 'flase' contact list is full width,
+  //if 'true' message list is full width
+  isActive = false;
+
+  constructor(
+    private signalService: SignalService,
+    private authService: AuthService,
+    private manageContactsService: ManageContactsService
+  ) {
   }
 
   ngOnInit(): void {
@@ -17,5 +26,9 @@ export class ChatHomepageComponent implements OnInit {
     if (!this.authService.isSignedIn) {
       this.signalService;
     }
+
+    this.manageContactsService.activatedEmitter.subscribe(value => {
+      this.isActive = value;
+    });
   }
 }
