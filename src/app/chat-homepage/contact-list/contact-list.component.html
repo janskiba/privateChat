@@ -1,3 +1,11 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+</ngx-spinner>
+
 <div class="contact-list-container">
   <div class="search-form">
     <form action=""></form>
@@ -19,7 +27,7 @@
   </div>
   <mat-selection-list #contacts [multiple]="false">
     <mat-list-option *ngFor="let contact of contactList" [value]="contact">
-      <app-contact [childContact]="contact"></app-contact>
+      <app-contact [childContact]="contact"> </app-contact>
     </mat-list-option>
   </mat-selection-list>
 </div>

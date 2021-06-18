@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 import { Contact } from 'src/app/shared/models/contact.model';
-import { AuthService } from "../../shared/auth.service";
-
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
@@ -15,10 +14,15 @@ export class ContactListComponent implements OnInit, OnDestroy {
   contactList = [];
   subsciption: Subscription;
 
-  constructor(private manageContactsService: ManageContactsService, private AuthService: AuthService) { }
+  constructor(
+    private manageContactsService: ManageContactsService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.getContacts();
+
   }
 
   ngOnDestroy() {
@@ -30,6 +34,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
       .getContacts()
       .subscribe((value) => {
         this.contactList = value;
+        this.spinner.hide();
       });
   }
 

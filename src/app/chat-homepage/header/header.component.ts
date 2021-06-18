@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    public manageContactsService: ManageContactsService
+    public manageContactsService: ManageContactsService,
   ) { }
 
   ngOnInit(): void {
