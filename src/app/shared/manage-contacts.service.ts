@@ -4,15 +4,18 @@ import {
 } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 import { ChatsService } from './chats.service';
 import { Contact } from './models/contact.model';
+import { LocalMessagesService } from './local-messages.service';
 @Injectable({
   providedIn: 'root',
 })
 export class ManageContactsService {
   clickedContact$: Observable<Contact>;
+  resetLocalArray = new Subject;
+
 
   //inform about a need to change ngClass on small devices
   activatedEmitter = new EventEmitter<boolean>();
@@ -21,6 +24,7 @@ export class ManageContactsService {
     private angularFirestore: AngularFirestore,
     private authService: AuthService,
     private chatsService: ChatsService,
+    private localMessagesService: LocalMessagesService
   ) { }
 
   findContact(contact: string) {
@@ -61,6 +65,9 @@ export class ManageContactsService {
     //update contact document with a field with its id
     ref.update({ chatId: ref.id });
 
+    //create new Item in local storage
+    this.localMessagesService.createNewObject(contact.email);
+
     return this.chatsService.createChat(contact.email, ref.id, currentUser);
   }
 
@@ -89,6 +96,8 @@ export class ManageContactsService {
 
   displayClickedContact(contact: Contact) {
     console.log(contact);
+    this.resetLocalArray.next([]);
+    this.localMessagesService.loadLocalMessages(contact.email);
     //convert object into observable
     this.chatsService.getMessagess(contact);
 

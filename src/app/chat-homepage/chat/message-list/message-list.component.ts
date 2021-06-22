@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth.service';
 import { ChatsService } from 'src/app/shared/chats.service';
 import { LocalMessagesService } from 'src/app/shared/local-messages.service';
+import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 import { Contact } from 'src/app/shared/models/contact.model';
 import { User } from 'src/app/shared/models/user.model';
 import { SignalService } from 'src/app/signal/signal.service';
@@ -28,13 +29,15 @@ export class MessageListComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public signalService: SignalService,
     private localMessagesService: LocalMessagesService,
+    private manageCon: ManageContactsService
   ) {
-
   }
 
   async ngOnInit() {
     this.getCurrentUser();
 
+    //reset local arrray on every click from contact list to prevent mixing messages between conversations
+    this.resetLocalArray();
     //listen to new messages
     this.loadLocalMessages();
     //create new object in local storage or load local messages
@@ -81,5 +84,12 @@ export class MessageListComponent implements OnInit, OnDestroy {
       console.log("loaded message: " + JSON.stringify(result));
       this.messages.push(result);
     }, err => { console.log(err); });
+    this.localMessagesService.loadLocalMessages(this.contact.email);
+  }
+
+  resetLocalArray() {
+    this.manageCon.resetLocalArray.subscribe(result => {
+      this.messages = [];
+    });
   }
 }

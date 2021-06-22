@@ -14,7 +14,7 @@ import { User } from './models/user.model';
 })
 export class LocalMessagesService {
   newMessage = new Subject;
-  localStorageMessageList: object[] = [];
+  public localStorageMessageList: object[] = [];
 
   constructor(private angularFireAuth: AngularFireAuth) {
   }
@@ -26,18 +26,18 @@ export class LocalMessagesService {
   //creates new obnject in local storage to store a conversasion
   //works when user user clicks on contact and this object doesn't exists
   async createNewObject(contactEmail: string) {
-    const localStorageList = localStorage.getItem(`${contactEmail}`);
-    if (!localStorageList) {
-      localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
-    } else { //load already stored messages from localStorage
-      this.localStorageMessageList = JSON.parse(localStorageList);
-      this.loadLocalMessages(this.localStorageMessageList);
-    }
+
+    localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
+
   }
 
-  loadLocalMessages(messageList: object[] = []) {
-    console.log("createNewObject actvated");
-    messageList.forEach(message => {
+  //creates new obnject in local storage to store a conversasion
+  //works when user user clicks on contact and this object doesn't exists
+  loadLocalMessages(contactEmail: string) {
+    console.log('load local messages activated');
+    const localStorageList = localStorage.getItem(`${contactEmail}`);
+    this.localStorageMessageList = JSON.parse(localStorageList);
+    this.localStorageMessageList.forEach(message => {
       this.newMessage.next(message);
       console.log(message);
     });
