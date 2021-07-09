@@ -59,15 +59,9 @@ export class ManageContactsService {
     };
 
     console.log(data);
-
     const ref = await contactsRef.add(data);
-
     //update contact document with a field with its id
     ref.update({ chatId: ref.id });
-
-    //create new Item in local storage
-    this.localMessagesService.createNewObject(contact.email);
-
     return this.chatsService.createChat(contact.email, ref.id, currentUser);
   }
 

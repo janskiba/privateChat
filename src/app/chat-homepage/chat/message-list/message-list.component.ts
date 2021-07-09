@@ -40,8 +40,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
     this.resetLocalArray();
     //listen to new messages
     this.loadLocalMessages();
-    //create new object in local storage or load local messages
-    this.localMessagesService.createNewObject(this.contact.email);
 
     this.chatsService.currentChat$.subscribe(result => {
       result.messages.map((message: Message) => {

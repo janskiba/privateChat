@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 import { Contact } from 'src/app/shared/models/contact.model';
+import { LocalMessagesService } from 'src/app/shared/local-messages.service';
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
@@ -16,7 +17,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
   constructor(
     private manageContactsService: ManageContactsService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private localMessagesService: LocalMessagesService
   ) { }
 
   ngOnInit(): void {

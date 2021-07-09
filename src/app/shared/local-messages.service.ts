@@ -25,15 +25,18 @@ export class LocalMessagesService {
 
   //creates new obnject in local storage to store a conversasion
   //works when user user clicks on contact and this object doesn't exists
-  async createNewObject(contactEmail: string) {
-
-    localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
+  createNewObject(contactEmail: string) {
+    if (!localStorage.getItem(`${contactEmail}`))
+      localStorage.setItem(`${contactEmail}`, JSON.stringify([]));
 
   }
 
   //creates new obnject in local storage to store a conversasion
   //works when user user clicks on contact and this object doesn't exists
   loadLocalMessages(contactEmail: string) {
+
+    //create local storage record if doesnt exists
+    this.createNewObject(contactEmail);
     console.log('load local messages activated');
     const localStorageList = localStorage.getItem(`${contactEmail}`);
     this.localStorageMessageList = JSON.parse(localStorageList);
@@ -80,6 +83,4 @@ export class LocalMessagesService {
     this.localStorageMessageList.push(message);
     localStorage.setItem(`${contactEmail}`, JSON.stringify(this.localStorageMessageList));
   }
-
-
 }
