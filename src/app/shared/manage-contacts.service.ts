@@ -9,6 +9,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { ChatsService } from './chats.service';
 import { Contact } from './models/contact.model';
 import { LocalMessagesService } from './local-messages.service';
+import { SignalService } from '../signal/signal.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -24,7 +25,8 @@ export class ManageContactsService {
     private angularFirestore: AngularFirestore,
     private authService: AuthService,
     private chatsService: ChatsService,
-    private localMessagesService: LocalMessagesService
+    private localMessagesService: LocalMessagesService,
+    private signalService: SignalService
   ) { }
 
   findContact(contact: string) {
@@ -94,7 +96,7 @@ export class ManageContactsService {
     this.localMessagesService.loadLocalMessages(contact.email);
     //convert object into observable
     this.chatsService.getMessagess(contact);
-
+    this.signalService.firstMessage = true;
     const obs = of(contact);
     return (this.clickedContact$ = obs);
   }

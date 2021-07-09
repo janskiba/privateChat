@@ -159,11 +159,13 @@ export class SignalService {
 
   async encryptAndSendMessage(contact: Contact, message: string) {
 
-    if (this.firstMessage) //first build a session
-      await this.startSession(contact.email);
+    if (this.firstMessage) {
+      //build a session only on first message
+      this.firstMessage = false;
 
-    //build a session only on first message
-    this.firstMessage = false;
+      //build a session
+      await this.startSession(contact.email);
+    }
 
     const loggedInUserCipher = new SessionCipher(
       this.loggedInUserStore,
