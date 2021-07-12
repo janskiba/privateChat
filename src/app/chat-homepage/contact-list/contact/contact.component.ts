@@ -3,6 +3,7 @@ import { LocalMessagesService } from 'src/app/shared/local-messages.service';
 
 import { ManageContactsService } from 'src/app/shared/manage-contacts.service';
 import { Contact } from 'src/app/shared/models/contact.model';
+import { SessionService } from 'src/app/shared/session.service';
 import { SignalService } from 'src/app/signal/signal.service';
 
 @Component({
@@ -18,7 +19,8 @@ export class ContactComponent implements OnInit {
   constructor(
     private manageContactsService: ManageContactsService,
     private SignalService: SignalService,
-    private localMessagesService: LocalMessagesService
+    private localMessagesService: LocalMessagesService,
+    private sessionService: SessionService
   ) { }
 
   ngOnInit(): void { }
@@ -31,6 +33,7 @@ export class ContactComponent implements OnInit {
   onContactClick(contact: Contact) {
     this.manageContactsService.displayClickedContact(contact);
     this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
+    this.sessionService.startSession(contact.chatId);
     this.changeEventEmitter();
   }
 }
