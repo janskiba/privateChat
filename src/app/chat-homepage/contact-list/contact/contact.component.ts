@@ -33,7 +33,7 @@ export class ContactComponent implements OnInit {
   onContactClick(contact: Contact) {
     this.manageContactsService.displayClickedContact(contact);
     this.SignalService.getPreKeyBundle(contact.email, contact.chatId);
-    this.sessionService.startSession(contact.chatId);
+    this.sessionService.stopSession(contact.chatId);
     this.changeEventEmitter();
   }
 }

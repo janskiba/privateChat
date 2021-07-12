@@ -29,6 +29,7 @@ export class ChatsService {
       creator: currentUser.email,
       contact: contactEmail,
       chatId: chatId,
+      sessionState: false,
       messages: [],
     };
     console.log(JSON.stringify(currentUser));

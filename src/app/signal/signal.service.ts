@@ -10,9 +10,6 @@ import {
   SessionBuilder,
   PreKeyType,
   SessionCipher,
-  MessageType,
-  StorageType,
-  KeyPairType,
   DeviceType,
 } from '@privacyresearch/libsignal-protocol-typescript';
 
@@ -22,6 +19,7 @@ import { Message } from "../shared/models/message.model";
 import { Contact } from '../shared/models/contact.model';
 import { AuthService } from '../shared/auth.service';
 import { LocalMessagesService } from '../shared/local-messages.service';
+import { SessionService } from '../shared/session.service';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +40,7 @@ export class SignalService {
     private chatsService: ChatsService,
     private storeService: StoreService,
     private localMessagesSerive: LocalMessagesService,
+    private sessionService: SessionService
 
   ) {
     this.loggedInUserStore = storeService;
@@ -159,12 +158,10 @@ export class SignalService {
 
   async encryptAndSendMessage(contact: Contact, message: string) {
 
-    if (this.firstMessage) {
-      //build a session only on first message
-      this.firstMessage = false;
-
+    if (this.sessionService.sessionState === false) {
       //build a session
       await this.startSession(contact.email);
+      this.sessionService.startSession(contact.chatId);
     }
 
     const loggedInUserCipher = new SessionCipher(
