@@ -201,18 +201,6 @@ export class SignalService {
     const decryptedText = new TextDecoder().decode(new Uint8Array(plaintext));
     console.log(decryptedText);
 
-    const decryptedMessage: Message = {
-      content: {
-        body: decryptedText,
-        registratonId: ciphertext.content.registratonId,
-        type: ciphertext.content.type,
-      },
-      createdAt: ciphertext.createdAt,
-      sender: ciphertext.sender,
-    };
-
-    //this.decryptedMessages.push(decryptedMessage);
-    //this.newMessage.next(decryptedMessage);
     this.localMessagesSerive.addContactMessage(ciphertext.sender, decryptedText);
   }
 
