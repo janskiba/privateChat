@@ -1,0 +1,13 @@
+<div *ngIf="authService.user$ | async as user" class="message-list-container">
+  <div class="message-list">
+    <div
+      class="message-container"
+      *ngFor="let message of messages"
+      [ngClass]="{ sender: user.email == message.sender }"
+    >
+      <p class="message">
+        {{ message.content.body }}
+      </p>
+    </div>
+  </div>
+</div>

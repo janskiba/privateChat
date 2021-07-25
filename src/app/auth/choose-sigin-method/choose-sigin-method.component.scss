@@ -1,0 +1,24 @@
+@import "../../../variables";
+
+.signin-methods {
+  margin-top: 100px;
+  button {
+    width: 100%;
+    max-width: 415px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    font-size: $base-font-size;
+    background-color: $grey-light;
+    border-radius: $border-radius;
+    color: $text-dark;
+    border: none;
+    img {
+      width: 40px;
+      height: auto;
+      margin-right: 3%;
+    }
+  }
+}

@@ -1,0 +1,61 @@
+@import "../../variables";
+
+#wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: $user-homepage-background;
+  color: $text-light;
+  .app-container {
+    max-width: $max-width;
+    max-height: $max-width;
+    margin: auto;
+    .components-container {
+      display: flex;
+      width: 100%;
+      max-width: 1400px;
+      height: calc(100vh - 80px);
+
+      .contact-list {
+        max-width: 520px;
+        height: 100%;
+        width: 100%;
+        background-color: $gray-primary;
+        border-right: 1px solid $primary-border-color;
+      }
+      .app-chat {
+        max-width: 880px;
+        height: calc(100vh - 80px);
+        width: 100%;
+        background-color: $gray-dark;
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  #wrapper {
+    .app-container {
+      .components-container {
+        .contact-list {
+          max-width: unset;
+          width: 100vw;
+          border-right: unset;
+        }
+
+        .hide {
+          display: none;
+        }
+
+        .app-chat {
+          display: none;
+        }
+
+        .active {
+          display: block;
+          max-width: unset;
+          width: 100vw;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+<div class="header-container">
+  <div
+    *ngIf="authService.user$ | async as user"
+    class="header-column header-left"
+    [ngClass]="{ hide: isActive }"
+  >
+    <div class="user-info">
+      <mat-icon class="material-icons-outlined md-40">face</mat-icon>
+      <p>{{ user.displayName }}</p>
+    </div>
+
+    <button type="submit" mat-icon-button (click)="authService.googleSignOut()">
+      <mat-icon class="material-icons md-30">logout</mat-icon>
+    </button>
+  </div>
+  <div class="header-column header-right" [ngClass]="{ active: isActive }">
+    <div
+      class="contact-info"
+      *ngIf="manageContactsService.clickedContact$ | async as contact"
+    >
+      <button type="submit" mat-icon-button (click)="changeEventEmitter()">
+        <mat-icon class="material-icons-outlined">arrow_back</mat-icon>
+      </button>
+
+      <mat-icon class="material-icons-outlined md-40">face</mat-icon>
+      <p>{{ contact.displayName }}</p>
+    </div>
+  </div>
+</div>

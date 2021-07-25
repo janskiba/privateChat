@@ -1,0 +1,19 @@
+@import "../../../../variables";
+form {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  input {
+    width: 100%;
+    max-width: 460px;
+    height: 40px;
+    padding-left: 10px;
+    margin: 0 10px 0 20px;
+    font-size: 17px;
+    background-color: #d8d9da;
+    color: #0d1418;
+    border: none;
+    border-radius: $border-radius;
+  }
+}

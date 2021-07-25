@@ -1,0 +1,25 @@
+@import "../../variables";
+
+.auth-container {
+  height: 100%;
+  padding: 0 20px;
+  background-color: $base-background;
+  text-align: center;
+  color: $text-dark;
+
+  .logo-container {
+    padding: 150px 0 50px;
+    img {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    img:hover {
+      cursor: pointer;
+    }
+
+    img:focus {
+      outline: none;
+    }
+  }
+}
