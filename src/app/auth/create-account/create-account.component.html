@@ -1,10 +1,10 @@
 <div class="create-account-container">
-  <p>Załóż konto podając poniższe informacje</p>
+  <p>Create an account</p>
   <div class="form-container">
     <form #createAccountForm="ngForm" (ngSubmit)="onSubmit(createAccountForm)">
       <input
         type="text"
-        placeholder="nazwa użytkownika"
+        placeholder="username"
         ngModel
         name="userName"
         required
@@ -19,7 +19,7 @@
       />
       <input
         type="password"
-        placeholder="hasło"
+        placeholder="password"
         ngModel
         name="password"
         required
@@ -29,7 +29,7 @@
         [disabled]="!createAccountForm.valid"
         [ngClass]="{ disabled: !createAccountForm.valid }"
       >
-        ZAŁÓŻ KONTO
+        CREATE AN ACCOUNT
       </button>
     </form>
   </div>
